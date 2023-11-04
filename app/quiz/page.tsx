@@ -1,5 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import auth from '../firebase';
 // Define a type for your quiz question
 type QuizQuestion = {
   question: string;
@@ -8,12 +11,23 @@ type QuizQuestion = {
 };
 
 function Quiz() {
+  const router = useRouter();
+  const [user, setUser] = useState(null); // User authentication state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]); // Provide type annotation for questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [score, setScore] = useState(0);
 
   useEffect(() => {
+    // Check the user's authentication state
+    onAuthStateChanged(auth, (user:any) => {
+      if (user) {
+        setUser(user);
+      } else {
+        // Redirect unauthenticated users to the login page
+        router.push('/login');
+      }
+    });
     // Fetch quiz questions from your data source (e.g., Firebase Firestore)
     // In this example, we're simulating questions using a local array
     const fetchedQuestions: QuizQuestion[] = [
