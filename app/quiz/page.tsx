@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import auth from '../firebase';
+
 // Define a type for your quiz question
 type QuizQuestion = {
   question: string;
@@ -15,12 +16,13 @@ function Quiz() {
   const [user, setUser] = useState(null); // User authentication state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]); // Provide type annotation for questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<(string | null)[]>([]);
   const [score, setScore] = useState(0);
+  const [isFinalQuestion, setIsFinalQuestion] = useState(false);
 
   useEffect(() => {
     // Check the user's authentication state
-    onAuthStateChanged(auth, (user:any) => {
+    onAuthStateChanged(auth, (user: any) => {
       if (user) {
         setUser(user);
       } else {
@@ -41,54 +43,105 @@ function Quiz() {
         options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
         correctAnswer: 'Jupiter',
       },
+      {
+        question: 'What is the largest planet in our solar system?',
+        options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
+        correctAnswer: 'Jupiter',
+      },
+      {
+        question: 'What is the largest planet in our solar system?',
+        options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
+        correctAnswer: 'Jupiter',
+      },
       // Add more questions
     ];
 
     setQuestions(fetchedQuestions);
   }, []);
 
+  useEffect(() => {
+    setIsFinalQuestion(currentQuestionIndex === questions.length - 1);
+  }, [currentQuestionIndex, questions]);
+
   const handleOptionSelect = (option: string) => {
-    setSelectedOption(option);
+    const updatedOptions = [...selectedOptions];
+    updatedOptions[currentQuestionIndex] = option;
+    setSelectedOptions(updatedOptions);
   };
 
   const handleNextQuestion = () => {
-    if (selectedOption === questions[currentQuestionIndex].correctAnswer) {
+    if (selectedOptions[currentQuestionIndex] === questions[currentQuestionIndex].correctAnswer) {
       // Increase the score if the selected option is correct
       setScore(score + 1);
     }
 
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
-    } else {
-      // The quiz is completed
-      // You can navigate to the results page or display the results
-      // For simplicity, we'll just log the score
-      console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
     }
+  }
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    }
+  }
+
+  const handleQuizSubmit = () => {
+    console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
+    router.push(`/results/${score}`);
+  
+    
+    // You can perform further actions, such as navigating to the results page.
   }
 
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div>
-      <h1>Quiz Page</h1>
+    <div className="min-h-screen flex items-center justify-center">
       {currentQuestion ? (
-        <div>
-          <h2>Question {currentQuestionIndex + 1}:</h2>
-          <p>{currentQuestion.question}</p>
-          <ul>
+        <div className="bg-base-300 p-8 rounded-lg shadow-lg w-4/6 h-4/6">
+          <h2 className="text-xl mb-4">Question {currentQuestionIndex + 1}:</h2>
+          <p className="text-lg mb-4">{currentQuestion.question}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {currentQuestion.options.map((option, index) => (
-              <li
+              <div
                 key={index}
-                className={selectedOption === option ? 'selected' : ''}
+                className={`p-4 text-lg cursor-pointer rounded-lg transition duration-300 ${
+                  selectedOptions[currentQuestionIndex] === option
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-700 hover:bg-gray-500'
+                }`}
                 onClick={() => handleOptionSelect(option)}
               >
                 {option}
-              </li>
+              </div>
             ))}
-          </ul>
-          <button onClick={handleNextQuestion}>Next</button>
+          </div>
+          <div className="mt-4 flex justify-between">
+            {currentQuestionIndex > 0 && (
+              <button
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md"
+                onClick={handlePreviousQuestion}
+              >
+                Previous
+              </button>
+            )}
+            {isFinalQuestion ? (
+              <button
+                className="px-4 py-2 bg-blue-500 hover-bg-blue-700 text-white rounded-md"
+                onClick={handleQuizSubmit}
+              >
+                Submit
+              </button>
+            ) : (
+              <button
+                className="px-4 py-2 bg-blue-500 hover-bg-blue-700 text-white rounded-md"
+                onClick={handleNextQuestion}
+              >
+                Next
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <p>Loading questions...</p>
