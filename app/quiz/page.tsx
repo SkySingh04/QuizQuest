@@ -20,6 +20,31 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
 
+  const fetchedQuestions: QuizQuestion[] = [
+    {
+      question: 'What is the capital of France?',
+      options: ['London', 'Berlin', 'Paris', 'Madrid'],
+      correctAnswer: 'Paris',
+    },
+    {
+      question: 'What is the largest planet in our solar system?',
+      options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
+      correctAnswer: 'Jupiter',
+    },
+    {
+      question: 'What is the largest planet in our solar system?',
+      options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
+      correctAnswer: 'Jupiter',
+    },
+    {
+      question: 'What is the largest planet in our solar system?',
+      options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
+      correctAnswer: 'Jupiter',
+    },
+    // Add more questions
+  ];
+
+  
   useEffect(() => {
     // Check the user's authentication state
     onAuthStateChanged(auth, (user: any) => {
@@ -32,30 +57,7 @@ function Quiz() {
     });
     // Fetch quiz questions from your data source (e.g., Firebase Firestore)
     // In this example, we're simulating questions using a local array
-    const fetchedQuestions: QuizQuestion[] = [
-      {
-        question: 'What is the capital of France?',
-        options: ['London', 'Berlin', 'Paris', 'Madrid'],
-        correctAnswer: 'Paris',
-      },
-      {
-        question: 'What is the largest planet in our solar system?',
-        options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
-        correctAnswer: 'Jupiter',
-      },
-      {
-        question: 'What is the largest planet in our solar system?',
-        options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
-        correctAnswer: 'Jupiter',
-      },
-      {
-        question: 'What is the largest planet in our solar system?',
-        options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
-        correctAnswer: 'Jupiter',
-      },
-      // Add more questions
-    ];
-
+    
     setQuestions(fetchedQuestions);
   }, []);
 
@@ -88,7 +90,13 @@ function Quiz() {
 
   const handleQuizSubmit = () => {
     console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
-    router.push(`/results/${score}`);
+    localStorage.setItem('quizScore', score.toString());
+    localStorage.setItem('questionlength', questions.length.toString());
+    localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+    const correctAnswers = questions.map((question) => question.correctAnswer);
+    localStorage.setItem('correctAnswers', JSON.stringify(correctAnswers));
+    localStorage.setItem('fetchedQuestions', JSON.stringify(fetchedQuestions));
+    router.push(`/results`);
   
     
     // You can perform further actions, such as navigating to the results page.

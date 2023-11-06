@@ -13,8 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import { createTheme } from '@mui/material/styles'; // Import createTheme
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import {  createUserWithEmailAndPassword , updateProfile} from 'firebase/auth';
 import auth from '../firebase';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { lightTheme, darkTheme } from '../themes';
@@ -40,6 +39,18 @@ export default function SignUp() {
         // Signed up
         const user = userCredential.user;
         console.log(user);
+        updateProfile(user, {
+          displayName: data.get('firstName') + ' ' + data.get('lastName'),
+        }).then(() => {
+          
+          console.log('Profile updated');
+        }).catch((error) => {
+          const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        setError(errorMessage);
+        });
         router.push(`/quiz`);
       })
       .catch((error) => {
