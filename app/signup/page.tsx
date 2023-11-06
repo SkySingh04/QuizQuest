@@ -38,12 +38,10 @@ export default function SignUp() {
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log(user);
         updateProfile(user, {
           displayName: data.get('firstName') + ' ' + data.get('lastName'),
         }).then(() => {
           
-          console.log('Profile updated');
         }).catch((error) => {
           const errorCode = error.code;
         const errorMessage = error.message;
