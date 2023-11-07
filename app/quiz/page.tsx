@@ -75,6 +75,7 @@ function Quiz() {
     if (selectedOptions[currentQuestionIndex] === questions[currentQuestionIndex].correctAnswer) {
       // Increase the score if the selected option is correct
       setScore(score + 1);
+      console.log(score)
     }
 
     if (currentQuestionIndex < questions.length - 1) {

@@ -8,8 +8,8 @@ export default function Home() {
       <p className="text-lg text-gray-200 mb-6">
         Test your knowledge and have fun learning with our interactive quizzes.
       </p>
-      <Link href="/quiz" className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600">
-          Get Started
+      <Link href="/createquiz" className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600">
+          Create Quiz!
       </Link>
       <div className="mt-8 text-gray-300 text-center">
         <p>Join the quiz challenge and unlock your potential!</p>

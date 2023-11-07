@@ -57,7 +57,7 @@ export default function Page() {
                       : selectedOptions &&
                         selectedOptions[index] === option
                       ? 'bg-red-400'
-                      : 'bg-gray-400'
+                      : 'bg-gray-600'
                   }`}
                 >
                   <div>
