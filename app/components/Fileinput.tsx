@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { useDropzone } from "react-dropzone";
+import { v4 as uuidv4 } from 'uuid';
+
 
 interface FileInputProps {
   onFileUpload: (data: any) => void;
@@ -10,6 +12,7 @@ interface QuizInfo {
   quizName: string;
   course: string;
   courseCode: string;
+  id: string;
 }
 
 interface QuizData {
@@ -25,6 +28,7 @@ function FileInput({ onFileUpload  }: FileInputProps) {
     quizName: "",
     course: "",
     courseCode: "",
+    id : uuidv4()
   } as QuizInfo);
 
   const onDrop = (acceptedFiles : any) => {
@@ -58,6 +62,7 @@ function FileInput({ onFileUpload  }: FileInputProps) {
         correctAnswer,
       });
     }
+    
     return quizData;
   };
 

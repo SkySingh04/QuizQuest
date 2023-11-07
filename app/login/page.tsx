@@ -15,7 +15,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { lightTheme, darkTheme } from '../themes';
 import { useRouter } from 'next/navigation';
-import auth from '../firebase';
+import {auth} from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 function SignIn() {

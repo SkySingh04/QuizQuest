@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import auth from '../firebase';
+import {auth} from '../firebase';
 
 // Define a type for your quiz question
 type QuizQuestion = {

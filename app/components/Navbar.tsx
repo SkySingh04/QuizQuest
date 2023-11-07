@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import auth from '../firebase';
+import {auth} from '../firebase';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { ThemeProvider } from '@mui/material/styles';

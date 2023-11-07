@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import {  createUserWithEmailAndPassword , updateProfile} from 'firebase/auth';
-import auth from '../firebase';
+import {auth} from '../firebase';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { lightTheme, darkTheme } from '../themes';
 
