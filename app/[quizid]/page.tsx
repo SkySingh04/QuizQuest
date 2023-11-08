@@ -94,10 +94,9 @@ function Quiz() {
   const handleNextQuestion = () => {
     if (selectedOptions[currentQuestionIndex] === questions[currentQuestionIndex].correctAnswer) {
       // Increase the score if the selected option is correct
-      setScore(score + 1);
-      console.log(score)
+      setScore((prevScore) => prevScore + 1);
     }
-
+  
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }

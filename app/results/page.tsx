@@ -1,34 +1,83 @@
 'use client';
 import React from 'react';
-import {auth} from '../firebase';
+import { collection, getDocs , arrayUnion , addDoc , doc , updateDoc} from 'firebase/firestore';
+import { auth, db } from '../firebase'; // Import Firestore and auth
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
-  const router = useRouter();
-  const [user, setUser] = useState(auth.currentUser); // User authentication state
+  const router = useRouter();  
+  const [quizResults, setQuizResults] = useState <any>([]);
+  const [user, setUser] = useState(auth.currentUser);
+  const [score, setScore] = useState(0);
+  const [questionlength, setQuestionlength] = useState(0);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [fetchedQuestions, setFetchedQuestions] = useState([]);
+
+
+  async function fetchQuizResults(){
+    let myScore = 0
+    const user = auth.currentUser
+    const user_id = user?.uid
+      console.log("hi")
+      const querySnapshot = await getDocs(collection(db , 'users'));
+      querySnapshot.forEach((doc) => {
+        if(doc.id == user_id){
+        // doc.data() is never undefined for query doc snapshots
+        setQuizResults(doc.data() as any)
+        const quizData = doc.data().quizData
+        const lastQuiz = quizData[quizData.length - 1];
+        console.log(lastQuiz)
+        // const quizScore = lastQuiz.score;
+        // setScore(quizScore)
+        const questionLength = lastQuiz.totalQuestions
+        setQuestionlength(questionLength)
+        // const quizQuestions = lastQuiz.questions;
+        // setQuestionlength(quizQuestions.totalQuestions)
+        const quizSelectedOptions = lastQuiz.selectedOptions;
+        setSelectedOptions(quizSelectedOptions)
+        const quizCorrectAnswers = lastQuiz.correctAnswers;
+        setCorrectAnswers(quizCorrectAnswers)
+
+        for(let i = 0; i < quizSelectedOptions.length; i++){
+          if(quizSelectedOptions[i] == quizCorrectAnswers[i]){
+            console.log("correct")
+            // setScore(score + 1)
+            myScore = myScore + 1
+          }
+        }
+        setScore(myScore)
+        const quizFetchedQuestions = lastQuiz.fetchedQuestions;
+        setFetchedQuestions(quizFetchedQuestions)
+      }});
+      
+ }
+  // User authentication state
   useEffect(() => {
     // Check the user's authentication state
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        
+        setUser(user as any);
+        fetchQuizResults();
       } else {
         // Redirect unauthenticated users to the login page
         router.push('/login');
       }
     });
   }, []);
-
   // Retrieve user details
-  const displayName = user?.providerData[0].displayName;
+  const displayName = user?.providerData[0].displayName ;
+// Retrieve score and other data from local storage
+// const storedScore = localStorage.getItem('quizScore');
+// const questionlength = localStorage.getItem('questionlength');
+// const selectedOptions = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
+// const correctAnswers = JSON.parse(localStorage.getItem('correctAnswers') || '[]');
+// const fetchedQuestions = JSON.parse(localStorage.getItem('fetchedQuestions') || '[]');
+ 
 
-  // Retrieve score and other data from local storage
-  const storedScore = localStorage.getItem('quizScore');
-  const questionlength = localStorage.getItem('questionlength');
-  const selectedOptions = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
-  const correctAnswers = JSON.parse(localStorage.getItem('correctAnswers') || '[]');
-  const fetchedQuestions = JSON.parse(localStorage.getItem('fetchedQuestions') || '[]');
 
   return (
     <div className=" min-h-screen flex flex-col items-center justify-center py-4 my-10">
@@ -38,8 +87,9 @@ export default function Page() {
           User: {displayName || 'User Not Found'}
         </p>
         <p className="text-xl">
-          Score: {storedScore}/{questionlength || 'Score Not Found'}
+          Score: {score}/{questionlength || 'Score Not Found'}
         </p>
+
 
         {fetchedQuestions.map((question:any, index : any) => (
           <div key={index} className="my-6">
