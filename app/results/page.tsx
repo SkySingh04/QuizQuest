@@ -18,7 +18,6 @@ export default function Page() {
 
 
   async function fetchQuizResults(){
-    let myScore = 0
     const user = auth.currentUser
     const user_id = user?.uid
       console.log("hi")
@@ -40,15 +39,8 @@ export default function Page() {
         setSelectedOptions(quizSelectedOptions)
         const quizCorrectAnswers = lastQuiz.correctAnswers;
         setCorrectAnswers(quizCorrectAnswers)
-
-        for(let i = 0; i < quizSelectedOptions.length; i++){
-          if(quizSelectedOptions[i] == quizCorrectAnswers[i]){
-            console.log("correct")
-            // setScore(score + 1)
-            myScore = myScore + 1
-          }
-        }
-        setScore(myScore)
+        const quizScore = lastQuiz.score;
+        setScore(quizScore)
         const quizFetchedQuestions = lastQuiz.fetchedQuestions;
         setFetchedQuestions(quizFetchedQuestions)
       }});

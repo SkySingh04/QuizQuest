@@ -131,8 +131,19 @@ function Quiz() {
       console.error('User not authenticated');
       return;
     }
+    let myScore = 0
+    const correctAnswers = questions.map((question : any) => question.correctAnswer)
+    for(let i = 0; i < selectedOptions.length; i++){
+      if(selectedOptions[i] == correctAnswers[i]){
+        console.log("correct")
+        // setScore(score + 1)
+        myScore = myScore + 1
+      }
+    }
+    console.log(myScore)
+
     const quizResults = {
-      score,
+      score : myScore,
       totalQuestions: questions.length,
       selectedOptions,
       correctAnswers: questions.map((question) => question.correctAnswer),
