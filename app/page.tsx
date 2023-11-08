@@ -12,6 +12,7 @@ async function fetchQuizData() {
   querySnapshot.forEach((doc) => {
     quizData.push(doc.data());
   });
+  console.log(quizData);
   return quizData;
 }
 
@@ -40,6 +41,7 @@ export default function Home() {
         <p>Join the quiz challenge and unlock your potential!</p>
         <div className="flex flex-wrap justify-center mt-4">
           {quizzes.map((quiz : any) => (
+            <Link href={`/quiz?id=${quiz.data.id}`}>
             <div
               key={quiz.data.id} // Assuming you have an "id" field in your quiz data
               className="bg-black text-blue-600 font-semibold px-4 py-2 rounded-md m-2 cursor-pointer hover:bg-blue-200"
@@ -54,8 +56,10 @@ export default function Home() {
                 <strong>Course Code:</strong> {quiz.data.courseCode}
               </div>
             </div>
+            </Link>
           ))}
         </div>
+        
       </div>
     </div>
   );

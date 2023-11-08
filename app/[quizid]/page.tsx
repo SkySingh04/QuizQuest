@@ -1,8 +1,13 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {auth} from '../firebase';
+import { collection, getDocs } from 'firebase/firestore';
+import {db} from "../firebase"; // Import your Firestore instance
+
+
+
 
 // Define a type for your quiz question
 type QuizQuestion = {
@@ -12,7 +17,12 @@ type QuizQuestion = {
 };
 
 function Quiz() {
+  
+
+  
   const router = useRouter();
+  const SearchParams = useSearchParams();
+  const id : any = SearchParams.get('id')
   const [user, setUser] = useState(null); // User authentication state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]); // Provide type annotation for questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -20,6 +30,32 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
 
+  async function fetchQuizData() {
+    let toReturn : any = null;
+    const quizRef = collection(db, 'quizzes');
+    const quizDoc = await getDocs(quizRef);
+    if (quizDoc) {
+      quizDoc.forEach((doc) => {
+        const quizData = doc.data();
+        const reqQuiz = quizData.data.id;
+        if (reqQuiz == id) {
+          console.log("found quiz")
+          toReturn = quizData.data;
+          // console.log(quizData.data)
+        }
+        else{
+          console.log("not found")
+        }
+      }); 
+      return toReturn  
+    }
+    else{
+      return null
+    }
+    
+  }
+
+      
   const fetchedQuestions: QuizQuestion[] = [
     {
       question: 'What is the capital of France?',
@@ -43,7 +79,7 @@ function Quiz() {
     },
     // Add more questions
   ];
-
+  
   
   useEffect(() => {
     // Check the user's authentication state
@@ -55,11 +91,20 @@ function Quiz() {
         router.push('/login');
       }
     });
+
+    
     // Fetch quiz questions from your data source (e.g., Firebase Firestore)
     // In this example, we're simulating questions using a local array
+      async function fetchData() {
+        const data = await fetchQuizData().then((data) => { return data });
+        console.log(data.quizData)
+        setQuestions(data.quizData);  
+      }
+      fetchData();
     
-    setQuestions(fetchedQuestions);
+    // setQuestions(fetchedQuestions);
   }, []);
+  
 
   useEffect(() => {
     setIsFinalQuestion(currentQuestionIndex === questions.length - 1);
@@ -104,6 +149,8 @@ function Quiz() {
   }
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center">
