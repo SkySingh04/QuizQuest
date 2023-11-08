@@ -1,11 +1,10 @@
 'use client'
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import { useRouter } from 'next/navigation'; // Use next/router instead of next/navigation
+import { useRouter } from 'next/navigation';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,52 +12,72 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import {  createUserWithEmailAndPassword , updateProfile} from 'firebase/auth';
-import {auth} from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { addDoc, collection  ,  doc , setDoc} from 'firebase/firestore'; // Import Firestore functions
+import { auth, db } from '../firebase';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { lightTheme, darkTheme } from '../themes';
-
-
-
-
-
+import { v4 as uuidv4 } from 'uuid';
 export default function SignUp() {
   const themePreference = useMediaQuery('(prefers-color-scheme: dark)') ? darkTheme : lightTheme;
   const router = useRouter();
 
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     let email = data.get('email') as string;
     let password = data.get('password') as string;
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        updateProfile(user, {
-          displayName: data.get('firstName') + ' ' + data.get('lastName'),
-        }).then(() => {
-          
-        }).catch((error) => {
-          const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        setError(errorMessage);
-        });
-        router.push(`/quiz`);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // const user_id = uuidv4();      
+      const userData = {
+        uid: user.uid,
+        email: user.email,
+        displayName: data.get('firstName') + ' ' + data.get('lastName'),
+        USN: data.get('USN'),
+        quizData: []
+      }
+      // Create a user document in Firestore
+      const userDocRef = doc(db, 'users', user.uid);
+          setDoc(userDocRef, userData)
+      .then(() => {
+        console.log('User document created with UID: ', user.uid);
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-        setError(errorMessage); // Set the error message
+        console.error('Error creating user document: ', error);
       });
+
+
+      // const userDocRef = await addDoc(collection(db, 'users'), {
+      //   uid: user.uid,
+      //   email: user.email,
+      //   displayName: data.get('firstName') + ' ' + data.get('lastName'),
+      //   USN: data.get('USN'),
+      //   quizData: []
+      // }).then((docRef) => {
+      //   console.log('Document written with ID: ', docRef.id);
+      // }
+      // ).catch((error) => {
+      //   console.error('Error adding document: ', error);
+      // });
+
+      // You can also update the user's profile
+      await updateProfile(user, {
+        displayName: data.get('firstName') + ' ' + data.get('lastName'),
+      });
+
+      router.push(`/`);
+    } catch (error : any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setError(errorMessage); // Set the error message
+    }
   };
+
 
   return (
     <ThemeProvider theme={themePreference}>
@@ -110,6 +129,16 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="USN"
+                  label="USN"
+                  name="USN"
+                  autoComplete="USN"
                 />
               </Grid>
               <Grid item xs={12}>

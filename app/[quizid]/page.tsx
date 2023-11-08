@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
-import {auth} from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import {db} from "../firebase"; // Import your Firestore instance
+import { collection, getDocs , arrayUnion , addDoc , doc , updateDoc} from 'firebase/firestore';
+import { auth, db } from '../firebase'; // Import Firestore and auth
+
 
 
 
@@ -22,7 +22,7 @@ function Quiz() {
   
   const router = useRouter();
   const SearchParams = useSearchParams();
-  const id : any = SearchParams.get('id')
+  const quizId : any = SearchParams.get('id')
   const [user, setUser] = useState(null); // User authentication state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]); // Provide type annotation for questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -38,7 +38,7 @@ function Quiz() {
       quizDoc.forEach((doc) => {
         const quizData = doc.data();
         const reqQuiz = quizData.data.id;
-        if (reqQuiz == id) {
+        if (reqQuiz == quizId) {
           console.log("found quiz")
           toReturn = quizData.data;
           // console.log(quizData.data)
@@ -55,31 +55,6 @@ function Quiz() {
     
   }
 
-      
-  const fetchedQuestions: QuizQuestion[] = [
-    {
-      question: 'What is the capital of France?',
-      options: ['London', 'Berlin', 'Paris', 'Madrid'],
-      correctAnswer: 'Paris',
-    },
-    {
-      question: 'What is the largest planet in our solar system?',
-      options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
-      correctAnswer: 'Jupiter',
-    },
-    {
-      question: 'What is the largest planet in our solar system?',
-      options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
-      correctAnswer: 'Jupiter',
-    },
-    {
-      question: 'What is the largest planet in our solar system?',
-      options: ['Mars', 'Venus', 'Jupiter', 'Earth'],
-      correctAnswer: 'Jupiter',
-    },
-    // Add more questions
-  ];
-  
   
   useEffect(() => {
     // Check the user's authentication state
@@ -134,19 +109,55 @@ function Quiz() {
     }
   }
 
-  const handleQuizSubmit = () => {
-    console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
-    localStorage.setItem('quizScore', score.toString());
-    localStorage.setItem('questionlength', questions.length.toString());
-    localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
-    const correctAnswers = questions.map((question) => question.correctAnswer);
-    localStorage.setItem('correctAnswers', JSON.stringify(correctAnswers));
-    localStorage.setItem('fetchedQuestions', JSON.stringify(fetchedQuestions));
-    router.push(`/results`);
+  // const handleQuizSubmit = () => {
+  //   console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
+  //   // localStorage.setItem('quizScore', score.toString());
+  //   // localStorage.setItem('questionlength', questions.length.toString());
+  //   // localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+  //   // const correctAnswers = questions.map((question) => question.correctAnswer);
+  //   // localStorage.setItem('correctAnswers', JSON.stringify(correctAnswers));
+  //   // localStorage.setItem('fetchedQuestions', JSON.stringify(fetchedQuestions));
+  //   router.push(`/results`);
+
+
+    const handleQuizSubmit = async () => {
+      console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
   
+      // Create an object with quiz results data
+      
+  
+    // Get the user's UID from the authenticated user
+    const user = auth.currentUser;
+    if (!user) {
+      console.error('User not authenticated');
+      return;
+    }
+    const quizResults = {
+      score,
+      totalQuestions: questions.length,
+      selectedOptions,
+      correctAnswers: questions.map((question) => question.correctAnswer),
+      fetchedQuestions: questions,
+      quizId: quizId,
+      time: new Date().toISOString(),
+    };
+
+      try {
+        // Create a reference to the user's document
+        const userDocRef = doc(db, 'users', user.uid);
+
+          await updateDoc(userDocRef as any, {
+            quizData: arrayUnion(quizResults),
+          });
+        // Redirect to the results page
+        router.push(`/results`);
+
+    } catch (error) {
+      console.error('Error storing quiz results:', error);
+    }
+  }
     
     // You can perform further actions, such as navigating to the results page.
-  }
 
   const currentQuestion = questions[currentQuestionIndex];
 
