@@ -23,6 +23,9 @@ function Quiz() {
   const router = useRouter();
   const SearchParams = useSearchParams();
   const quizId : any = SearchParams.get('id')
+  const quizName : any = SearchParams.get('name')
+  const course : any = SearchParams.get('course')
+  const courseCode : any = SearchParams.get('coursecode')
   const [user, setUser] = useState(null); // User authentication state
   const [questions, setQuestions] = useState<QuizQuestion[]>([]); // Provide type annotation for questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -108,15 +111,6 @@ function Quiz() {
     }
   }
 
-  // const handleQuizSubmit = () => {
-  //   console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
-  //   // localStorage.setItem('quizScore', score.toString());
-  //   // localStorage.setItem('questionlength', questions.length.toString());
-  //   // localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
-  //   // const correctAnswers = questions.map((question) => question.correctAnswer);
-  //   // localStorage.setItem('correctAnswers', JSON.stringify(correctAnswers));
-  //   // localStorage.setItem('fetchedQuestions', JSON.stringify(fetchedQuestions));
-  //   router.push(`/results`);
 
 
     const handleQuizSubmit = async () => {
@@ -149,6 +143,9 @@ function Quiz() {
       correctAnswers: questions.map((question) => question.correctAnswer),
       fetchedQuestions: questions,
       quizId: quizId,
+      quizName: quizName,
+      course: course,
+      courseCode: courseCode,
       time: new Date().toISOString(),
     };
 

@@ -32,7 +32,7 @@ function SignIn() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        router.push(`/quiz`);
+        router.push(`/`);
       })
       .catch((error) => {
         const errorCode = error.code;

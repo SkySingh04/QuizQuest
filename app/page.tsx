@@ -34,14 +34,17 @@ export default function Home() {
       <p className="text-lg text-gray-200 mb-6">
         Test your knowledge and have fun learning with our interactive quizzes.
       </p>
-      <Link href="/createquiz" className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600">
+      <Link href="/createquiz" className="bg-blue-500 text-white font-semibold m-2 px-6 py-2 rounded-md hover:bg-blue-600">
         Create Quiz!
+      </Link>
+      <Link href="/admin" className="bg-blue-900 text-white m-2 font-semibold px-6 py-2 rounded-md hover:bg-blue-600">
+        Admin Dashboard
       </Link>
       <div className="mt-8 text-gray-300 text-center">
         <p>Join the quiz challenge and unlock your potential!</p>
         <div className="flex flex-wrap justify-center mt-4">
           {quizzes.map((quiz : any) => (
-            <Link href={`/quiz?id=${quiz.data.id}`}>
+            <Link href={`/quiz?id=${quiz.data.id}&name=${quiz.data.quizName}&course=${quiz.data.course}&coursecode=${quiz.data.courseCode}`}>
             <div
               key={quiz.data.id} // Assuming you have an "id" field in your quiz data
               className="bg-black text-blue-600 font-semibold px-4 py-2 rounded-md m-2 cursor-pointer hover:bg-blue-200"

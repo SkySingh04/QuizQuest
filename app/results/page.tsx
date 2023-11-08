@@ -62,13 +62,7 @@ export default function Page() {
   }, []);
   // Retrieve user details
   const displayName = user?.providerData[0].displayName ;
-// Retrieve score and other data from local storage
-// const storedScore = localStorage.getItem('quizScore');
-// const questionlength = localStorage.getItem('questionlength');
-// const selectedOptions = JSON.parse(localStorage.getItem('selectedOptions') || '[]');
-// const correctAnswers = JSON.parse(localStorage.getItem('correctAnswers') || '[]');
-// const fetchedQuestions = JSON.parse(localStorage.getItem('fetchedQuestions') || '[]');
- 
+
 
 
   return (

@@ -1,11 +1,38 @@
 'use client'
-import React, { useState } from "react";
+import React, { useState  , useEffect} from "react";
 import FileInput from "../components/Fileinput"
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import {db} from '../firebase';
+import { useRouter } from "next/navigation";
 
 function QuizGenerator() {
   const [excelData, setExcelData] = useState(null);
+  const [user, setUser] = useState(auth.currentUser);
+  const router = useRouter();
+  // User authentication state
+  useEffect(() => {
+    // Check the user's authentication state
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log(user.providerData[0].email)
+        if (user.providerData[0].email == "admindsce@dsce.com"){
+        setUser(user as any);
+      }
+      else{
+        alert("Unauthorized :(")
+        router.push('/login');
+      }
+       }
+      
+      else {
+        // Redirect unauthenticated users to the login page
+        router.push('/login');
+      }
+    });
+  }, []);
+
 
   const handleFileUpload = async (data : any)  => {
     setExcelData(data);

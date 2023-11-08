@@ -59,7 +59,7 @@ const Navbar = () => {
               <li>
                 <button onClick={handlesignOut}>Sign Out</button>
               </li>
-              <li><a href="/quiz">Quiz</a></li>
+
             </>
           ) : (
             <>
