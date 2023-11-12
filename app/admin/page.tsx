@@ -6,11 +6,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import QuizDetails from '../components/QuizDetails';
+import {formatDate} from '../Date';
 
 const AdminPage = () => {
   const [user, setUser] = useState(auth.currentUser);
   const router = useRouter();
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState<any[]>([]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -59,11 +60,35 @@ const AdminPage = () => {
   }
 
   const handleDownloadExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(userData);
+    var d = new Date();
+    var n = formatDate(d);
+    // Flatten the userData array and include details for each quiz
+    const flatData = userData.map(user => {
+      const userFlat = {
+        'User ID': user.uid,
+        'USN': user.USN,
+        'Email': user.email,
+        'Student Name': user.displayName,
+        'Total Score': calculateTotalScore(user.quizData),
+        // Flatten quizData array
+        ...user.quizData.reduce((acc : any, quiz : any, index : any) => ({
+          ...acc,
+          [` ${quiz.quizName} `]: `${quiz.score} / ${quiz.totalQuestions}`,
+          [`${quiz.quizName} Time`]: quiz.time,
+          [`${quiz.quizName} Quiz ID`]: quiz.quizId,
+          [`${quiz.quizName} Course`]: quiz.course,
+          [`${quiz.quizName} Course Code`]: quiz.courseCode,
+        }), {}),
+      };
+      return userFlat;
+    });
+  
+    // Create Excel sheet
+    const ws = XLSX.utils.json_to_sheet(flatData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'UserData');
+    XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}` );
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAsExcelFile(excelBuffer, 'userData.xlsx');
+    saveAsExcelFile(excelBuffer, `Student Data Sheet ${n}`);
   };
 
   const saveAsExcelFile = (buffer: any, fileName: string) => {

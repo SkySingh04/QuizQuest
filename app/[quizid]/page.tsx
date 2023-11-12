@@ -4,6 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { collection, getDocs , arrayUnion , addDoc , doc , updateDoc} from 'firebase/firestore';
 import { auth, db } from '../firebase'; // Import Firestore and auth
+import {formatDateTime} from '../Date';
 
 
 
@@ -33,16 +34,6 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
 
-  function formatDate(date : any ) {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
-    return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
-  }
 
   async function fetchQuizData() {
     let toReturn : any = null;
@@ -148,7 +139,7 @@ function Quiz() {
     console.log(myScore)
 
     var d = new Date();
-    var n = formatDate(d);
+    var n = formatDateTime(d);
     const quizResults = {
       score : myScore,
       totalQuestions: questions.length,
