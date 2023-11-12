@@ -4,7 +4,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
-import jsPDF from 'jspdf';
+import * as XLSX from 'xlsx';
+import QuizDetails from '../components/QuizDetails';
 
 const AdminPage = () => {
   const [user, setUser] = useState(auth.currentUser);
@@ -57,33 +58,28 @@ const AdminPage = () => {
     return `${totalScore} / ${totalQuestions}`;
   }
 
-  const handleDownloadPDF = () => {
-    const doc: any = new jsPDF();
+  const handleDownloadExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(userData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'UserData');
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    saveAsExcelFile(excelBuffer, 'userData.xlsx');
+  };
 
-    doc.text('User Data', 10, 10);
-
-    const tableData = [];
-    tableData.push(['User ID', 'USN', 'Email', 'Display Name', 'Total Score']);
-
-    userData.forEach((user: any) => {
-      const totalScore = calculateTotalScore(user.quizData);
-      tableData.push([user.uid, user.USN, user.email, user.displayName, totalScore]);
-    });
-
-    doc.autoTable({
-      head: tableData[0],
-      body: tableData.slice(1),
-    });
-
-    doc.save('userData.pdf');
+  const saveAsExcelFile = (buffer: any, fileName: string) => {
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
   };
 
   return (
     <div className='my-[70px] p-6'>
       <h1 className='text-3xl font-bold mb-6'>Admin Page</h1>
       <button
-        onClick={handleDownloadPDF}
-        disabled= {true}
+        onClick={handleDownloadExcel}
+        disabled={userData.length === 0}
         className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4`}
       >
         Download Excel
@@ -100,23 +96,21 @@ const AdminPage = () => {
           </tr>
         </thead>
         <tbody>
-          {userData.map((user : any) => (
+          {userData.map((user: any) => (
             <tr key={user.uid} className='border-b-2'>
               <td className='p-4'>{user.uid}</td>
               <td className='p-4'>{user.USN}</td>
               <td className='p-4'>{user.email}</td>
               <td className='p-4'>{user.displayName}</td>
               <td className='p-4'>
-                {user.quizData.map((quiz : any, index : any) => (
+                {user.quizData.map((quiz: any, index: any) => (
                   <div key={index} className='mb-4'>
-                    <h4 className='text-xl font-semibold'>Quiz {index + 1}</h4>
-                    <p>Score: {quiz.score}</p>
-                    <p>Total Questions: {quiz.totalQuestions}</p>
-                    <p>Time: {quiz.time}</p>
-                    <p>Quiz ID: {quiz.quizId}</p>
-                    <p>Quiz Name: {quiz.quizName}</p>
-                    <p>Course: {quiz.course}</p>
-                    <p>Course Code: {quiz.courseCode}</p>
+                    <details className='mb-2'>
+                      <summary className='text-xl font-semibold cursor-pointer'>
+                        {quiz.quizName}: {quiz.score} / {quiz.totalQuestions}
+                      </summary>
+                      <QuizDetails quiz={quiz} />
+                    </details>
                   </div>
                 ))}
               </td>

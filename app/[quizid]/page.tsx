@@ -33,6 +33,17 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
 
+  function formatDate(date : any ) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear() + "  " + strTime;
+  }
+
   async function fetchQuizData() {
     let toReturn : any = null;
     const quizRef = collection(db, 'quizzes');
@@ -136,6 +147,8 @@ function Quiz() {
     }
     console.log(myScore)
 
+    var d = new Date();
+    var n = formatDate(d);
     const quizResults = {
       score : myScore,
       totalQuestions: questions.length,
@@ -146,7 +159,7 @@ function Quiz() {
       quizName: quizName,
       course: course,
       courseCode: courseCode,
-      time: new Date().toISOString(),
+      time: n
     };
 
       try {
