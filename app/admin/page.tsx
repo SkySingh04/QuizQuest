@@ -88,7 +88,7 @@ const AdminPage = () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}` );
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    saveAsExcelFile(excelBuffer, `Student Data Sheet ${n}`);
+    saveAsExcelFile(excelBuffer, `Student Data Sheet ${n} .xlsx`);
   };
 
   const saveAsExcelFile = (buffer: any, fileName: string) => {

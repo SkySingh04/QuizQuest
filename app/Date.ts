@@ -10,7 +10,7 @@ function formatDateTime(date : any ) {
   }
 
 function formatDate(date :  any){
-  return (date.getMonth()+1) + "." + date.getDate() + "." + date.getFullYear() ;
+  return (date.getMonth()+1) + "." + date.getDate() + "." + date.getFullYear() + " " ;
 }
 
 export  {formatDate, formatDateTime};
