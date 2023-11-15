@@ -109,12 +109,6 @@ const AdminPage = () => {
       >
         Download Excel
       </button>
-      <a
-      href='/createquiz'
-      className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-4 rounded mb-4`}
-      >
-        Create Quiz
-      </a>
       <table className='min-w-full bg-gray-800 rounded-lg shadow-md mt-4'>
         <thead>
           <tr>
