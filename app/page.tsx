@@ -29,7 +29,7 @@ export default function Home() {
   }, []);
   // console.log("quizzes are " + quizzes)
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-500 to-gray-900">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-4xl font-bold text-white mb-4">Welcome to the Quiz App</h1>
       <p className="text-lg text-gray-200 mb-6">
         Test your knowledge and have fun learning with our interactive quizzes.

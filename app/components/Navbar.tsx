@@ -57,14 +57,13 @@ const Navbar = () => {
           {user ? ( // Check if the user is logged in
             <>
               <li>
-                <button onClick={handlesignOut}>Sign Out</button>
+                <a onClick={handlesignOut}>Sign Out</a>
               </li>
 
             </>
           ) : (
             <>
-              <li><a href="/login">Login</a></li>
-              <li><a href="/signup">Sign Up</a></li>
+              <li><a href="/login">Sign In / Sign Up</a></li>
             </>
           )}
         </ul>

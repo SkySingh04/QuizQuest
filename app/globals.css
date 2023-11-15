@@ -18,12 +18,11 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: -webkit-linear-gradient(to right, #2B2E4A, #1F4172);
+  background: linear-gradient(to right, #2B2E4A, #1F4172);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
 }
 
 .App {
@@ -73,8 +72,7 @@ a {
 
 .loginbutton {
   border-radius: 20px;
-  border: 1px solid #ff4b2b;
-  background-color: #ff4b2b;
+  border: 1px solid black;
   color: #ffffff;
   font-size: 12px;
   font-weight: bold;
@@ -98,7 +96,6 @@ button.ghost {
 }
 
 .loginform {
-  background-color: gray;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,7 +106,6 @@ button.ghost {
 }
 
 input {
-  background-color: #eee;
   border: none;
   padding: 12px 15px;
   margin: 8px 0;
@@ -188,9 +184,9 @@ input {
 }
 
 .overlay {
-  background: #ff416c;
-  background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-  background: linear-gradient(to right, #ff4b2b, #ff416c);
+  background: #2B2E4A;
+  background: -webkit-linear-gradient(to right, #0F4C75, #3282B8);
+  background: linear-gradient(to right, #0F4C75, #3282B8);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
@@ -239,42 +235,3 @@ input {
   transform: translateX(20%);
 }
 
-.social-container {
-  margin: 20px 0;
-}
-
-.social-container a {
-  border: 1px solid #dddddd;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 5px;
-  height: 40px;
-  width: 40px;
-}
-
-footer {
-  background-color: #222;
-  color: #fff;
-  font-size: 14px;
-  bottom: 0;
-  position: fixed;
-  left: 0;
-  right: 0;
-  text-align: center;
-  z-index: 999;
-}
-
-footer p {
-  margin: 10px 0;
-}
-
-footer i {
-  color: red;
-}
-
-footer a {
-  color: #3c97bf;
-  text-decoration: none;
-}
