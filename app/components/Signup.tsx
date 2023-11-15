@@ -34,20 +34,6 @@ function SignUpForm() {
         console.error('Error creating user document: ', error);
       });
 
-
-      // const userDocRef = await addDoc(collection(db, 'users'), {
-      //   uid: user.uid,
-      //   email: user.email,
-      //   displayName: data.get('firstName') + ' ' + data.get('lastName'),
-      //   USN: data.get('USN'),
-      //   quizData: []
-      // }).then((docRef) => {
-      //   console.log('Document written with ID: ', docRef.id);
-      // }
-      // ).catch((error) => {
-      //   console.error('Error adding document: ', error);
-      // });
-
       // You can also update the user's profile
       await updateProfile(user, {
         displayName: data.get('firstName') + ' ' + data.get('lastName'),
@@ -57,6 +43,7 @@ function SignUpForm() {
     } catch (error : any) {
       const errorCode = error.code;
       const errorMessage = error.message;
+      console.log(errorCode, errorMessage);
       setError(errorMessage); // Set the error message
     }
   };
@@ -66,18 +53,20 @@ function SignUpForm() {
       <form onSubmit={handleSubmit} className="loginform bg-customBlue">
         <h1>Create Account</h1>
         
-        <input
-        className="bg-customBeige text-black"
-          type="text"
-          name="firstName"
-          placeholder="First Name"
-        />
-        <input
-        className="bg-customBeige text-black"
-          type="text"
-          name="lastName"
-          placeholder="Last Name"
-        />
+        <div className="flex space-x-2">
+          <input
+            className="bg-customBeige text-black flex-1"
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+          />
+          <input
+            className="bg-customBeige text-black flex-1"
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+          />
+        </div>
         <input
         className="bg-customBeige text-black"
           type="email"

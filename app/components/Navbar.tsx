@@ -48,7 +48,7 @@ const Navbar = () => {
     <div className="navbar bg-base-300 fixed top-0 w-full z-50">
       <div className="navbar-start">
         <a href="/" className="text-lg font-bold p-2">
-          QUIZ {/* Add your logo here */}
+          QUIZ QUEST {/* Add your logo here */}
         </a>
       </div>
       <div className="navbar-end text-center">

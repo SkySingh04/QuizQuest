@@ -235,3 +235,13 @@ input {
   transform: translateX(20%);
 }
 
+/* Add this to your CSS or SCSS file */
+.hover\:tilt:hover {
+  transform: perspective(1000px) rotateY(-40deg);
+  transition: transform 0.3s ease;
+}
+
+.hover1\:tilt:hover {
+  transform: perspective(1000px) rotateY(40deg);
+  transition: transform 0.3s ease;
+}
