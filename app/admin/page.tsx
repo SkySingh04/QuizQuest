@@ -100,7 +100,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className='my-[70px] p-6'>
+    <div className='  flex flex-col items-center justify-center  p-6 text-white min-h-screen '>
       <h1 className='text-3xl font-bold mb-6'>Admin Page</h1>
       <button
         onClick={handleDownloadExcel}
@@ -115,7 +115,7 @@ const AdminPage = () => {
       >
         Create Quiz
       </a>
-      <table className='min-w-full bg-gray-800 rounded-lg shadow-md mt-4'>
+      <table className='min-w-full  bg-gray-800 rounded-lg shadow-md mt-4'>
         <thead>
           <tr>
             <th className='border-b-2 p-4'>User ID</th>

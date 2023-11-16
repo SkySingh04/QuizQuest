@@ -177,7 +177,7 @@ function Quiz() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       {currentQuestion ? (
-        <div className="bg-base-300 p-8 rounded-lg shadow-lg w-4/6 h-4/6">
+        <div className="bg-slate-800 text-white p-8 rounded-lg shadow-lg w-4/6 h-4/6">
           <h2 className="text-xl mb-4">Question {currentQuestionIndex + 1}:</h2>
           <p className="text-lg mb-4">{currentQuestion.question}</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

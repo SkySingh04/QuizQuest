@@ -66,21 +66,21 @@ export default function Page() {
 
 
   return (
-    <div className=" min-h-screen flex flex-col items-center justify-center py-4 my-10">
-      <div className=" p-8 rounded-md shadow-md w-4/5 lg:w-3/5">
+    <div className=" min-h-screen flex flex-col items-center justify-center py-4 my-14">
+      <div className=" p-8 rounded-md shadow-md w-4/5 lg:w-3/5 bg-customViolet">
         <h1 className="text-3xl font-bold mb-4">Quiz Results</h1>
-        <p className="text-xl">
+        <p className="text-xl text-white">
           User: {displayName || 'User Not Found'}
         </p>
-        <p className="text-xl">
+        <p className="text-xl text-white">
           Score: {score}/{questionlength || 'Score Not Found'}
         </p>
 
 
         {fetchedQuestions.map((question:any, index : any) => (
-          <div key={index} className="my-6">
+          <div key={index} className="my-6 rounded-md shadow-md bg-[#0F4C75]  p-2">
             <h2 className="text-lg font-semibold mb-2">Question {index + 1}:</h2>
-            <p className="text-base mb-2">{question.question}</p>
+            <p className="text-base mb-2 text-white">{question.question}</p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {question.options.map((option:any, optionIndex:any) => (
                 <div

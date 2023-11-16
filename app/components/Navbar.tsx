@@ -4,12 +4,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import {auth} from '../firebase';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { ThemeProvider } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { lightTheme, darkTheme } from '../themes';
 
 const Navbar = () => {
-  const themePreference = useMediaQuery('(prefers-color-scheme: dark)') ? darkTheme : lightTheme;
   const [user, setUser] = useState(null); // Use state to track the user's authentication state
   const router = useRouter();
 
@@ -44,8 +40,7 @@ const Navbar = () => {
   };
 
   return (
-    <ThemeProvider theme={themePreference}>
-    <div className="navbar bg-base-300 fixed top-0 w-full z-50">
+    <div className="navbar fixed top-0 w-full z-50 bg-slate-800 text-white">
       <div className="navbar-start">
         <a href="/" className="text-lg font-bold p-2">
           QUIZ QUEST {/* Add your logo here */}
@@ -63,13 +58,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <li><a href="/login">Sign In / Sign Up</a></li>
+              <li><a href="/login">Login</a></li>
             </>
           )}
         </ul>
       </div>
     </div>
-    </ThemeProvider>
   );
 }
 
