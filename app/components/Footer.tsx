@@ -15,6 +15,7 @@ const Footer = () => {
         <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
           <IconButton
             className='text-white'
+            color="inherit"
             href="https://github.com/Akash-Singh04"
             target="_blank"
             rel="noopener noreferrer"
@@ -23,6 +24,7 @@ const Footer = () => {
           </IconButton>
           <IconButton
             className='text-white'
+            color="inherit"
             href="https://www.linkedin.com/in/akash-singh-a57081253/"
             target="_blank"
             rel="noopener noreferrer"
@@ -31,6 +33,7 @@ const Footer = () => {
           </IconButton>
           <IconButton
             className='text-white'
+            color="inherit"
             href="https://www.instagram.com/kind.of.akash/"
             target="_blank"
             rel="noopener noreferrer"
