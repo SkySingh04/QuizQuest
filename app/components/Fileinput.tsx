@@ -3,7 +3,6 @@ import * as XLSX from "xlsx";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from 'uuid';
 
-
 interface FileInputProps {
   onFileUpload: (data: any) => void;
 }
@@ -22,16 +21,18 @@ interface QuizData {
   correctAnswer: string;
 }
 
-function FileInput({ onFileUpload  }: FileInputProps) {
-  const [excelData, setExcelData] = useState (null);
+function FileInput({ onFileUpload }: FileInputProps) {
+  const [excelData, setExcelData] = useState(null);
   const [quizInfo, setQuizInfo] = useState({
     quizName: "",
     course: "",
     courseCode: "",
-    id : uuidv4()
+    id: uuidv4()
   } as QuizInfo);
+  const [quizGenerated, setQuizGenerated] = useState(false);
+  const [viewQuizData, setViewQuizData] = useState(false);
 
-  const onDrop = (acceptedFiles : any) => {
+  const onDrop = (acceptedFiles: any) => {
     const file = acceptedFiles[0];
     const reader = new FileReader();
 
@@ -42,7 +43,7 @@ function FileInput({ onFileUpload  }: FileInputProps) {
       const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       const quizData = condenseExcelData(excelData);
       setExcelData(quizData as any);
-      onFileUpload({ ...quizInfo, quizData });
+      // onFileUpload({ ...quizInfo, quizData }); // This line is moved to the generateQuiz function
     };
 
     reader.readAsBinaryString(file);
@@ -62,21 +63,38 @@ function FileInput({ onFileUpload  }: FileInputProps) {
         correctAnswer,
       });
     }
-    
+
     return quizData;
   };
 
-  const handleInputChange = (e : any) => {
+  const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setQuizInfo({
       ...quizInfo,
       [name]: value,
     });
   };
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+  const generateQuiz = () => {
+    if (quizInfo.quizName && quizInfo.course && quizInfo.courseCode && excelData) {
+      onFileUpload({ ...quizInfo, quizData: excelData });
+      setQuizGenerated(true);
+    } else {
+      alert("Please fill in all fields and upload an Excel file.");
+    }
+  };
+
+  const toggleViewQuizData = () => {
+    if (excelData) {
+      setViewQuizData(!viewQuizData);
+    } else {
+      alert("Please upload an Excel file to view quiz data.");
+    }
+  };
   return (
-    <div className="h-screen flex flex-col items-center lg:mt-[70px] mt-[100px]">
+    <div className="h-full  flex flex-col items-center lg:mt-[70px] mt-[100px]">
       <div className="w-full max-w-md mt-4">
         <input
           type="text"
@@ -111,9 +129,44 @@ function FileInput({ onFileUpload  }: FileInputProps) {
         <input {...getInputProps()} />
         <p className="text-lg">Drag & drop an Excel file here, or click to select one</p>
       </div>
-      {excelData && (
+      {viewQuizData && (
+        <div className="mt-4">
+          <h2 className="text-white">Quiz Data:</h2>
+          <pre className="text-white">{JSON.stringify(excelData, null, 2)}</pre>
+        </div>
+      )}
+      {quizGenerated && (
         <div className="mt-4">
           <h2 className="text-white">Successfully Generated Quiz!</h2>
+        </div>
+      )}
+      <div className="flex mt-4 mb-10">
+        {!viewQuizData ? (
+          <button
+            onClick={generateQuiz}
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4"
+          >
+            Generate Quiz
+          </button>
+        ) : (
+          <button
+            onClick={toggleViewQuizData}
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4"
+          >
+            Hide Quiz Data
+          </button>
+        )}
+        <button
+          onClick={toggleViewQuizData}
+          className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600"
+        >
+          {viewQuizData ? "Hide Quiz Data" : "View Quiz Data"}
+        </button>
+      </div>
+      {viewQuizData && (
+        <div className="mt-4">
+          <h2 className="text-white">Successfully Generated Quiz!</h2>
+          {/* Render your quiz data here */}
         </div>
       )}
     </div>
