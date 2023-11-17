@@ -108,11 +108,3 @@ Contributions are welcome! Feel free to fork the repository, make improvements, 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## Acknowledgments
-
-- Special thanks to the contributors and open-source community for their support and inspiration.
-
----
-
-Feel free to expand on or modify this documentation to suit the specific details and additional information about your QuizQuest project!
