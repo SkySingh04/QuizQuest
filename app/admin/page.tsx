@@ -100,7 +100,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className='  flex flex-col items-center justify-center  p-6 text-white min-h-screen '>
+    <div className='  flex flex-col items-center justify-center  p-6 text-white min-h-screen my-[100px]'>
       <h1 className='text-3xl font-bold mb-6'>Admin Page</h1>
       <button
         onClick={handleDownloadExcel}
