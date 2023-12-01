@@ -94,15 +94,16 @@ function FileInput({ onFileUpload }: FileInputProps) {
     }
   };
   return (
-    <div className="h-full  flex flex-col items-center lg:mt-[70px] mt-[100px]">
-      <div className="w-full max-w-md mt-4">
+    <div className="h-full
+      flex flex-col items-center lg:mt-[70px] mt-[100px] ">
+      <div className="w-full max-w-md mt-4  ">
         <input
           type="text"
           name="quizName"
           value={quizInfo.quizName}
           placeholder="Quiz Name"
           onChange={handleInputChange}
-          className="text-white w-full m-2 p-2 rounded"
+          className="text-black bg-slate-500 w-full m-2 p-2 rounded"
         />
         <input
           type="text"
@@ -110,7 +111,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
           value={quizInfo.course}
           placeholder="Course"
           onChange={handleInputChange}
-          className="text-white w-full m-2 p-2 rounded"
+          className="text-black bg-slate-500 w-full m-2 p-2 rounded"
         />
         <input
           type="text"
@@ -118,13 +119,13 @@ function FileInput({ onFileUpload }: FileInputProps) {
           value={quizInfo.courseCode}
           placeholder="Course Code"
           onChange={handleInputChange}
-          className="text-white w-full m-2 p-2 rounded"
+          className="text-black bg-slate-500 w-full m-2 p-2 rounded"
         />
       </div>
       <h2 className="text-lg mt-4">Upload Excel File</h2>
       <div
         {...getRootProps()}
-        className="file-input p-6 rounded-lg border-dashed border-2 border-gray-300 shadow-lg hover:shadow-xl cursor-pointer mt-4 w-1/2 h-1/6"
+        className="file-input p-6 rounded-lg border-dashed border-2 border-gray-300 shadow-lg hover:shadow-xl cursor-pointer mt-4 w-1/2 h-1/6 "
       >
         <input {...getInputProps()} />
         <p className="text-lg">Drag & drop an Excel file here, or click to select one</p>
@@ -144,21 +145,21 @@ function FileInput({ onFileUpload }: FileInputProps) {
         {!viewQuizData ? (
           <button
             onClick={generateQuiz}
-            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4"
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4 mb-[200px]"
           >
             Generate Quiz
           </button>
         ) : (
           <button
             onClick={toggleViewQuizData}
-            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4"
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-4"
           >
             Hide Quiz Data
           </button>
         )}
         <button
           onClick={toggleViewQuizData}
-          className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600"
+          className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px]"
         >
           {viewQuizData ? "Hide Quiz Data" : "View Quiz Data"}
         </button>
