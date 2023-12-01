@@ -15,14 +15,31 @@ async function fetchQuizData() {
   querySnapshot.forEach((doc) => {
     quizData.push(doc.data());
   });
-  console.log(quizData);
+  // console.log(quizData);
   return quizData;
+}
+
+async function fetchUserData() {
+  const userCollection = collection(db, 'users');
+  const querySnapshot = await getDocs(userCollection);
+  const userData:any = [];
+  querySnapshot.forEach((doc) => {
+    userData.push(doc.data());
+  });
+  const currentUserData = userData.filter((entry:any) => {
+    return (
+      entry.uid == auth.currentUser?.uid
+    );
+  });
+  console.log(currentUserData);
+  return userData;
 }
 // StudentPage component
 const StudentPage = () => {
     const router = useRouter();
 
     const [user, setUser] = useState(auth.currentUser);
+    const [userData, setUserData] = useState([]);
 
     useEffect(() => {
         // Check the user's authentication state
@@ -43,11 +60,13 @@ const StudentPage = () => {
   useEffect(() => {
     async function fetchData() {
       const data = await fetchQuizData();
+      const userData = await fetchUserData();
       setQuizzes(data);
+      setUserData(userData);
     }
     fetchData();
   }, []);
-  console.log("quizzes are " + quizzes)
+  // console.log("quizzes are " + quizzes)
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -55,17 +74,49 @@ const StudentPage = () => {
       <div className="mt-8 text-gray-300 text-center">
   <h1 className="text-3xl font-semibold mb-6">Join the quiz challenge and unlock your potential!</h1>
   <div className="flex flex-wrap justify-center mt-4">
-    {quizzes.map((quiz: any) => (
-      <Link key={quiz.data.id} href={`/quiz?id=${quiz.data.id}&name=${quiz.data.quizName}&course=${quiz.data.course}&coursecode=${quiz.data.courseCode}`}>
-        <div className="bg-gradient-to-r from-customBlue to-customViolet font-black  px-6 py-4 rounded-md m-4 cursor-pointer transform hover:scale-105 transition duration-300">
+  {quizzes.map((quiz: any) => {
+  const userAttempts: any = userData.find(
+    (data: any) => data.uid === auth.currentUser?.uid
+  );
+
+  const isQuizAttempted =
+    userAttempts &&
+    userAttempts.quizData.some((attempt: any) => attempt.quizId === quiz.data.id);
+
+  return (
+    <div
+      key={quiz.data.id}
+      className={`bg-gradient-to-r from-customBlue to-customViolet font-black px-6 py-4 rounded-md m-4 cursor-pointer transform hover:scale-105 transition duration-300 ${
+        isQuizAttempted ? 'opacity-50' : ''
+      }`}
+    >
+      {isQuizAttempted ? (
+        <div>
+          <p className="text-lg">Quiz Name: {quiz.data.quizName}</p>
+          <p>Course: {quiz.data.course}</p>
+          <p>Course Code: {quiz.data.courseCode}</p>
+          <p>This quiz has been attempted.</p>
+        </div>
+      ) : (
+        <Link
+          href={`/quiz?id=${quiz.data.id}&name=${quiz.data.quizName}&course=${quiz.data.course}&coursecode=${quiz.data.courseCode}`}
+        >
           <div>
             <p className="text-lg">Quiz Name: {quiz.data.quizName}</p>
             <p>Course: {quiz.data.course}</p>
             <p>Course Code: {quiz.data.courseCode}</p>
           </div>
-        </div>
-      </Link>
-    ))}
+        </Link>
+      )}
+    </div>
+  );
+})}
+
+
+
+
+
+
   </div>
 </div>
 

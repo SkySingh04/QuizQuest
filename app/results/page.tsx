@@ -20,7 +20,6 @@ export default function Page() {
   async function fetchQuizResults(){
     const user = auth.currentUser
     const user_id = user?.uid
-      console.log("hi")
       const querySnapshot = await getDocs(collection(db , 'users'));
       querySnapshot.forEach((doc) => {
         if(doc.id == user_id){
@@ -28,7 +27,6 @@ export default function Page() {
         setQuizResults(doc.data() as any)
         const quizData = doc.data().quizData
         const lastQuiz = quizData[quizData.length - 1];
-        console.log(lastQuiz)
         // const quizScore = lastQuiz.score;
         // setScore(quizScore)
         const questionLength = lastQuiz.totalQuestions
