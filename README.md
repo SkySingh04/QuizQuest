@@ -95,8 +95,9 @@ The live deployment of QuizQuest can be accessed at [QuizQuest](https://quiz-que
 
 ## Contributing
 
--Contributions are welcome! Feel free to fork the repository, make improvements, and create pull requests.
--Please view the list of open issues at [Issues](https://github.com/Akash-Singh04/QuizQuest/issues). Any contributions to them are welcome.
+- Contributions are welcome! Feel free to fork the repository, make improvements, and create pull requests.
+
+- Please view the list of open issues at [Issues](https://github.com/Akash-Singh04/QuizQuest/issues). Any contributions to them are welcome.
 
 ## Authors
 
