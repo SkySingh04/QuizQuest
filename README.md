@@ -31,19 +31,19 @@ QuizQuest is a comprehensive quiz management system designed to simplify the cre
 
 4. Steps to Set Firebase Environment Variables
 
-1. **After Getting Collaborator Access**:
+a. After Getting Collaborator Access:
    - Visit the Firebase Console
    - Navigate to the project settings.
 
-2. **Retrieve Firebase Configuration**:
+b. Retrieve Firebase Configuration:
    - In the Firebase project settings, locate and select the "General" tab.
    - Scroll down to the "Your apps" section and click on Quiz-Quest
 
-3. **Copy Configuration Details**:
+c. Copy Configuration Details:
    - After creating the web app, you'll get a configuration object containing keys like `apiKey`, `authDomain`, `projectId`, etc.
    - Copy these configuration details.
 
-4. **Environment Variable Setup**:
+d. Environment Variable Setup:
    - Create a `.env.local` file in the root directory of your project (ensure it's added to `.gitignore` for security).
    - Add the Firebase configuration details as environment variables:
 
@@ -57,13 +57,13 @@ QuizQuest is a comprehensive quiz management system designed to simplify the cre
    NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID="YOUR_FIREBASE_MEASUREMENT_ID"  // (Optional, for Analytics)
    ```
 
-5. **Usage in Project**:
+e. Usage in Project:
    - Access these environment variables in your code as `process.env.VARIABLE_NAME`.
 
-6. **Restart Server**:
+f. Restart Server:
    - After setting environment variables, restart the development server to apply the changes.
 
-### Note:
+###### Note:
 - Ensure that you replace `"YOUR_FIREBASE_XXX"` placeholders with the actual values from your Firebase project configuration.
 - Remember to keep your `.env.local` file private and do not expose sensitive credentials in your code repository.
 
