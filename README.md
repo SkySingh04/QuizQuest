@@ -4,29 +4,9 @@
 
 QuizQuest is a comprehensive quiz management system designed to simplify the creation, management, and completion of quizzes. It provides a user-friendly interface and integrates Firebase authentication and Firestore database, ensuring secure access and management of quizzes for both admin and student roles.
 
-## Features
-
-### Admin Panel
-
-- **Firebase Authentication**: Admins can securely log in to access the admin panel.
-- **Quiz Data Upload**: Admins can upload Excel files containing quiz data for automatic quiz generation.
-- **Interactive UI**: User-friendly interface for entering quiz details and managing quiz data.
-- **Firebase Integration**: Firebase Firestore database integration for storing quiz data securely.
-
-### Student Dashboard
-
-- **User Authentication**: Students can securely log in using Firebase authentication.
-- **Quiz Access**: Access available quizzes, view details, and track completion status.
-- **Real-time Updates**: Firebase ensures real-time updates for quiz status and progress tracking.
-
-### Other Features
-
-- **Social Media Integration**: Links to social media platforms for enhanced user interaction.
-- **Contact Information**: Contact details included for user queries or support.
-
 ## Tech Stack
 
-- **Next.js**: Frontend framework for building the interactive UI.
+- **Next.js**: Full Stack framework for building the web application.
 - **Typescript**: Ensuring type safety and improved development experience.
 - **Firebase**: Authentication, Firestore database for secure data storage.
 - **Tailwind CSS**: Utilized for styling and responsive design.
@@ -45,26 +25,19 @@ QuizQuest is a comprehensive quiz management system designed to simplify the cre
    cd QuizQuest
    npm install
    ```
+   
+3. Firebase Configuration Setup
+-Contact @Akash-Singh04 to get collaborator access to the firebase project that contains the User Authentication and Firebase Firestore Database. An email will be sent with the invitaion for the same.
 
-3. Run the project:
+4. Steps to Set Firebase Environment Variables
 
-   ```bash
-   npm run dev
-   ```
-
-
-## Firebase Configuration Setup
-
-### Steps to Set Firebase Environment Variables
-
-1. **Create a Firebase Project**:
-   - Visit the [Firebase Console](https://console.firebase.google.com/) and create a new project.
+1. **After Getting Collaborator Access**:
+   - Visit the Firebase Console
    - Navigate to the project settings.
 
 2. **Retrieve Firebase Configuration**:
    - In the Firebase project settings, locate and select the "General" tab.
-   - Scroll down to the "Your apps" section.
-   - Click on the web app icon (`</>`) to create a new web app or use an existing one.
+   - Scroll down to the "Your apps" section and click on Quiz-Quest
 
 3. **Copy Configuration Details**:
    - After creating the web app, you'll get a configuration object containing keys like `apiKey`, `authDomain`, `projectId`, etc.
@@ -94,16 +67,42 @@ QuizQuest is a comprehensive quiz management system designed to simplify the cre
 - Ensure that you replace `"YOUR_FIREBASE_XXX"` placeholders with the actual values from your Firebase project configuration.
 - Remember to keep your `.env.local` file private and do not expose sensitive credentials in your code repository.
 
+5. Run the project:
 
-4. Access the project locally at `http://localhost:3000`.
+   ```bash
+   npm run dev
+   ```
+6. Access the project locally at `http://localhost:3000`.
 
 ## Deployment
 
 The live deployment of QuizQuest can be accessed at [QuizQuest](https://quiz-quest-delta.vercel.app/).
 
+## Features
+
+### Admin Panel
+
+- **Firebase Authentication**: Admins can securely log in to access the admin panel.
+- **Quiz Data Upload**: Admins can upload Excel files containing quiz data for automatic quiz generation.
+- **Interactive UI**: User-friendly interface for entering quiz details and managing quiz data.
+- **Firebase Integration**: Firebase Firestore database integration for storing quiz data securely.
+
+### Student Dashboard
+
+- **User Authentication**: Students can securely log in using Firebase authentication.
+- **Quiz Access**: Access available quizzes, view details, and track completion status.
+- **Real-time Updates**: Firebase ensures real-time updates for quiz status and progress tracking.
+
 ## Contributing
 
-Contributions are welcome! Feel free to fork the repository, make improvements, and create pull requests.
+-Contributions are welcome! Feel free to fork the repository, make improvements, and create pull requests.
+-Please view the list of open issues at [Issues](https://github.com/Akash-Singh04/QuizQuest/issues). Any contributions to them are welcome.
+
+## Authors
+
+* **Akash Singh**(https://github.com/Akash-Singh04)
+
+See also the list of [contributors](https://github.com/Akash-Singh04/QuizQuest/contributors) who participated in this project.
 
 ## License
 
