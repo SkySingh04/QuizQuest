@@ -7,7 +7,7 @@ QuizQuest is a comprehensive quiz management system designed to simplify the cre
 
 ## Contributing
 
-- Please check the Contributions[https://github.com/Akash-Singh04/QuizQuest/blob/master/CONTRIBUTING] file for instructions on how to get started with the project on your local system
+- Please check the [Contributions](https://github.com/Akash-Singh04/QuizQuest/blob/master/CONTRIBUTING) file for instructions on how to get started with the project on your local system
 - Contributions are welcome! Feel free to fork the repository, make improvements, and create pull requests.
 - Please view the list of open issues at [Issues](https://github.com/Akash-Singh04/QuizQuest/issues). Any contributions to them are welcome.
 
