@@ -17,7 +17,7 @@ function QuizGenerator() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         console.log(user.providerData[0].email)
-        if (user.providerData[0].email == "admindsce@dsce.com"){
+        if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com'){
         setUser(user as any);
       }
       else{

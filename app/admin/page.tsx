@@ -16,7 +16,7 @@ const AdminPage = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        if (user.providerData[0].email === 'admindsce@dsce.com') {
+        if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com') {
           setUser(user);
         } else {
           alert('Unauthorized :(');
@@ -35,7 +35,7 @@ const AdminPage = () => {
       const userDataArray: any = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.email === 'admindsce@dsce.com') {
+        if (data.email === 'admindsce@dsce.com' || data.email === 'testadmin@dsce.com') {
           // Exclude admin user
         } else {
           userDataArray.push(data);
