@@ -12,8 +12,10 @@ const AdminPage = () => {
   const [user, setUser] = useState(auth.currentUser);
   const router = useRouter();
   const [userData, setUserData] = useState<any[]>([]);
+  const [quizData, setQuizData] = useState<any>([]);
 
   useEffect(() => {
+    fetchQuizData();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com') {
@@ -42,6 +44,20 @@ const AdminPage = () => {
         }
       });
       setUserData(userDataArray);
+    } catch (error) {
+      console.error('Error fetching admin data:', error);
+    }
+  }
+
+  async function fetchQuizData() {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'quizzes'));
+      const quizNameArray: any = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        quizNameArray.push(data.data.quizName)
+      });
+      setQuizData(quizNameArray);      
     } catch (error) {
       console.error('Error fetching admin data:', error);
     }
@@ -91,6 +107,30 @@ const AdminPage = () => {
     saveAsExcelFile(excelBuffer, `Student Data Sheet ${n} .xlsx`);
   };
 
+  // Function to handle downloading individual quiz data
+  const handleDownloadQuiz = (quizName : any) => {
+    // Filter userData to get data for the specific quizName
+    const quizData = userData.map(user => {
+      const userQuiz = user.quizData.find((quiz: any) => quiz.quizName === quizName);
+      return {
+        'USN': user.USN,
+        'Student Name': user.displayName,
+        'Quiz Name': userQuiz ? userQuiz.quizName : '',
+        'Score': userQuiz ? `${userQuiz.score} / ${userQuiz.totalQuestions}` : '',
+        'Time': userQuiz ? userQuiz.time : '',
+        'Course': userQuiz ? userQuiz.course : '',
+        'Course Code': userQuiz ? userQuiz.courseCode : '',
+      };
+    }).filter(user => user['Quiz Name'] !== '');
+
+    // Create Excel sheet for the specific quiz
+    const ws = XLSX.utils.json_to_sheet(quizData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, `${quizName} Data`);
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    saveAsExcelFile(excelBuffer, `${quizName} Data.xlsx`);
+  };
+
   const saveAsExcelFile = (buffer: any, fileName: string) => {
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     const link = document.createElement('a');
@@ -107,8 +147,25 @@ const AdminPage = () => {
         disabled={userData.length === 0}
         className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4`}
       >
-        Download Excel
+        Download All Quiz Data
       </button>
+      {/* Button for each quiz */}
+      {userData.length > 0 && userData[0].quizData.length > 0 && (
+        
+      
+        <div className="flex flex-wrap">
+          {console.log(quizData)}
+          {quizData.map((quiz:any, index: any) => (
+            <button
+              key={index}
+              onClick={() => handleDownloadQuiz(quiz)}
+              className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 mr-4`}
+            >
+              Download {quiz} Data
+            </button>
+          ))}
+        </div>
+      )}
       <a
       href='/createquiz'
       className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-4 rounded mb-4`}
