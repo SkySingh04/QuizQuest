@@ -43,7 +43,7 @@ The live deployment of QuizQuest can be accessed at [QuizQuest](https://quiz-que
 
 ## Authors
 
-* **Akash Singh**(https://github.com/Akash-Singh04)
+* [**Akash Singh**](https://github.com/Akash-Singh04)
 
 See also the list of [contributors](https://github.com/Akash-Singh04/QuizQuest/contributors) who participated in this project.
 
