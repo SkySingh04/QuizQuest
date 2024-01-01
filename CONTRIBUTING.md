@@ -62,5 +62,10 @@ f. Restart Server:
    ```
 6. Access the project locally at `http://localhost:3000`.
 
+## Questions or Need Help?
+
+If you have any questions or need further assistance, feel free to open an issue or reach out to [Akash-Singh04](https://github.com/Akash-Singh04).
+
+We appreciate your contributions and look forward to your involvement in improving Quiz-Quest!
 
 # Please view the list of open issues at [Issues](https://github.com/Akash-Singh04/QuizQuest/issues). Any contributions to them are welcome.
