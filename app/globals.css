@@ -245,3 +245,54 @@ input {
   transform: perspective(1000px) rotateY(40deg);
   transition: transform 0.3s ease;
 }
+
+/* Add this CSS in your stylesheet or component */
+.forgot-password-dialog {
+  position: fixed;
+  top: 50%;
+  left: 13%;
+  transform: translate(-50%, -50%);
+  background-color: #1F4172;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  width: 300px;
+}
+
+
+
+.forgot-password-dialog h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.forgot-password-dialog form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-password-dialog label {
+  margin-bottom: 8px;
+}
+
+.forgot-password-dialog input {
+  padding: 8px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.forgot-password-dialog button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.forgot-password-dialog button:hover {
+  background-color: #0056b3;
+}
+
