@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { doc , setDoc} from 'firebase/firestore'; // Import Firestore functions
 import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import toast from "react-hot-toast";
 function SignUpForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
@@ -38,12 +39,14 @@ function SignUpForm() {
       await updateProfile(user, {
         displayName: data.get('firstName') + ' ' + data.get('lastName'),
       });
+      toast.success("Sign up successful");
 
       router.push(`/`);
     } catch (error : any) {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorCode, errorMessage);
+      toast.error("Sign up failed");
       setError(errorMessage); // Set the error message
     }
   };
