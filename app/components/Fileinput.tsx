@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from 'uuid';
-
+import {useRouter} from "next/navigation";
 interface FileInputProps {
   onFileUpload: (data: any) => void;
 }
@@ -22,6 +22,7 @@ interface QuizData {
 }
 
 function FileInput({ onFileUpload }: FileInputProps) {
+  const router = useRouter();
   const [excelData, setExcelData] = useState(null);
   const [quizInfo, setQuizInfo] = useState({
     quizName: "",
@@ -78,9 +79,11 @@ function FileInput({ onFileUpload }: FileInputProps) {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const generateQuiz = () => {
+
     if (quizInfo.quizName && quizInfo.course && quizInfo.courseCode && excelData) {
       onFileUpload({ ...quizInfo, quizData: excelData });
       setQuizGenerated(true);
+      router.push("/");
     } else {
       alert("Please fill in all fields and upload an Excel file.");
     }
