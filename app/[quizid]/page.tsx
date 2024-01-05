@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { collection, getDocs , arrayUnion , addDoc , doc , updateDoc} from 'firebase/firestore';
 import { auth, db } from '../firebase'; // Import Firestore and auth
 import {formatDateTime} from '../Date';
+import toast from 'react-hot-toast';
 
 
 
@@ -117,6 +118,7 @@ function Quiz() {
 
     const handleQuizSubmit = async () => {
       console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
+      toast.success('Quiz Submitted Succesfully!');
   
       // Create an object with quiz results data
       
