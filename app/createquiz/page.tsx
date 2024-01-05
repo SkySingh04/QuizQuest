@@ -6,6 +6,7 @@ import { auth } from '../firebase';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import {db} from '../firebase';
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 function QuizGenerator() {
   const [excelData, setExcelData] = useState(null);
@@ -56,10 +57,12 @@ function QuizGenerator() {
         // Add the quiz data to Firestore
         console.log(data)
         const docRef = await addDoc(quizCollection, {data});
+        toast.success("Quiz added successfully");
   
         console.log('Quiz data added with ID: ', docRef.id);
       } catch (error) {
         console.error('Error adding quiz data: ', error);
+        toast.error("Quiz addition failed");
       }
     }
   };
