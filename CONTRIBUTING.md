@@ -14,8 +14,8 @@
    ```
    
 3. Firebase Configuration Setup
-- Contact @Akash-Singh04 to get the .env file containing the firebase configurations. After getting the env file skip to step (d).
-- Alternatively Contact @Akash-Singh04 to get collaborator access to the firebase project that contains the User Authentication and Firebase Firestore Database. An email will be sent with the invitaion for the same.
+- Contact [@kind.of.akash](https://www.instagram.com/kind.of.akash/) on Instagram to get the .env file containing the firebase configurations. After getting the env file skip to step (d).
+- Alternatively Contact [@kind.of.akash](https://www.instagram.com/kind.of.akash/) on Instagram to get collaborator access to the firebase project that contains the User Authentication and Firebase Firestore Database. An email will be sent with the invitaion for the same.
 
 4. Steps to Set Firebase Environment Variables
 
