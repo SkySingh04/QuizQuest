@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import QuizDetails from '../components/QuizDetails';
 import {formatDate} from '../Date';
+import toast from 'react-hot-toast';
 
 const AdminPage = () => {
   const [user, setUser] = useState(auth.currentUser);
@@ -21,7 +22,7 @@ const AdminPage = () => {
         if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com') {
           setUser(user);
         } else {
-          alert('Unauthorized :(');
+          toast.error("Unauthorized :(");
           router.push('/login');
         }
       } else {
@@ -105,6 +106,7 @@ const AdminPage = () => {
     XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}` );
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     saveAsExcelFile(excelBuffer, `Student Data Sheet ${n} .xlsx`);
+    
   };
 
   // Function to handle downloading individual quiz data
@@ -129,6 +131,7 @@ const AdminPage = () => {
     XLSX.utils.book_append_sheet(wb, ws, `${quizName} Data`);
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     saveAsExcelFile(excelBuffer, `${quizName} Data.xlsx`);
+    toast.success(`${quizName} Data Downloaded Successfully!`);
   };
 
   const saveAsExcelFile = (buffer: any, fileName: string) => {

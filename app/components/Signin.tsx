@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from "next/navigation";
 import {auth} from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import toast from "react-hot-toast";
 function SignInForm() {
   const router = useRouter();
 
@@ -28,6 +29,7 @@ function SignInForm() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
+        toast.success("Sign in successful");
         router.push(`/`);
       })
       .catch((error) => {
@@ -35,7 +37,9 @@ function SignInForm() {
         const errorMessage = error.message;
         console.log(errorCode);
         console.log(errorMessage);
+        toast.error("Sign in failed");
         setError(errorMessage); // Set the error message
+
       });
   }
 
