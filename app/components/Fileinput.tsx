@@ -12,6 +12,7 @@ interface QuizInfo {
   course: string;
   courseCode: string;
   id: string;
+  isDeleted: boolean;
 }
 
 interface QuizData {
@@ -28,7 +29,8 @@ function FileInput({ onFileUpload }: FileInputProps) {
     quizName: "",
     course: "",
     courseCode: "",
-    id: uuidv4()
+    id: uuidv4(),
+    isDeleted: false,
   } as QuizInfo);
   const [quizGenerated, setQuizGenerated] = useState(false);
   const [viewQuizData, setViewQuizData] = useState(false);

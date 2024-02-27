@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import QuizDetails from '../components/QuizDetails';
@@ -55,16 +55,34 @@ const AdminPage = () => {
   async function fetchQuizData() {
     try {
       const querySnapshot = await getDocs(collection(db, 'quizzes'));
-      const quizNameArray: any = [];
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        quizNameArray.push(data.data.quizName)
-      });
-      setQuizData(quizNameArray);      
+      const quizNameArray = querySnapshot.docs
+        .filter(doc => !doc.data().data.isDeleted)
+        .map(doc => doc.data().data.quizName);
+      setQuizData(quizNameArray);
     } catch (error) {
-      console.error('Error fetching admin data:', error);
+      console.error('Error fetching quiz data:', error);
     }
   }
+
+  async function handleDeleteQuiz(quizName: string) {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'quizzes'));
+      const quizDoc = querySnapshot.docs.find(doc => doc.data().data.quizName === quizName);
+      if (quizDoc) {
+        await updateDoc(doc(db, 'quizzes', quizDoc.id), {
+          'data.isDeleted': true,
+        });
+        fetchQuizData();
+        toast.success(`Quiz ${quizName} marked as deleted.`);
+      } else {
+        console.error('Quiz not found:', quizName);
+        toast.error(`Quiz ${quizName} not found.`);
+      }
+    } catch (error) {
+      console.error('Error deleting quiz:', error);
+      toast.error(`Error marking quiz ${quizName} as deleted.`);
+    }
+  };
 
   function calculateTotalScore(quizData: any) {
     let totalScore = 0;
@@ -156,21 +174,26 @@ const AdminPage = () => {
       >
         Download All Quiz Data
       </button>
-      {/* Button for each quiz */}
-      {userData.length > 0 && userData[0].quizData.length > 0 && (
-        
-      
+      {userData.length > 0 && quizData.length > 0 && (
         <div className="flex flex-wrap">
           {console.log(quizData)}
-          {quizData.map((quiz:any, index: any) => (
-            <button
-              key={index}
-              onClick={() => handleDownloadQuiz(quiz)}
-              className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 mr-4`}
-            >
-              Download {quiz} Data
-            </button>
-          ))}
+          {quizData
+            .map((quiz:any, index: any) => (
+              <div key={index} className="mr-4 mb-4">
+                <button
+                  onClick={() => handleDownloadQuiz(quiz)}
+                  className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                >
+                  Download {quiz} Data
+                </button>
+                <button
+                  onClick={() => handleDeleteQuiz(quiz)}
+                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
         </div>
       )}
       <a
