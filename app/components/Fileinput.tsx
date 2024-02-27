@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from 'uuid';
 import {useRouter} from "next/navigation";
 interface FileInputProps {
-  onFileUpload: (data: { quizInfo: QuizInfo; quizData: any; fileName: string }) => void;
+  onFileUpload: (data: any) => void;
 }
 
 interface QuizInfo {
@@ -84,9 +84,8 @@ function FileInput({ onFileUpload }: FileInputProps) {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const generateQuiz = () => {
-
     if (quizInfo.quizName && quizInfo.course && quizInfo.courseCode && excelData) {
-      onFileUpload({ quizInfo, quizData: excelData, fileName });
+      onFileUpload({ ...quizInfo, quizData: excelData, fileName });
       setQuizGenerated(true);
       router.push("/");
     } else {
