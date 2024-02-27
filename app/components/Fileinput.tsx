@@ -155,19 +155,20 @@ function FileInput({ onFileUpload }: FileInputProps) {
         </div>
       )}
       <div className="flex mt-4 mb-10">
-        {!viewQuizData ? (
+        {!viewQuizData && (
           <button
             onClick={generateQuiz}
-            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4 mb-[200px]"
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-2"
           >
             Generate Quiz
           </button>
-        ) : (
+        )}
+        {viewQuizData && (
           <button
-            onClick={toggleViewQuizData}
-            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-4"
+            onClick={generateQuiz}
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-2"
           >
-            Hide Quiz Data
+            Generate Quiz
           </button>
         )}
         <button
