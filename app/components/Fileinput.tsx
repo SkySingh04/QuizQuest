@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from 'uuid';
 import {useRouter} from "next/navigation";
 interface FileInputProps {
-  onFileUpload: (data: any) => void;
+  onFileUpload: (data: { quizInfo: QuizInfo; quizData: any; fileName: string }) => void;
 }
 
 interface QuizInfo {
@@ -12,6 +12,7 @@ interface QuizInfo {
   course: string;
   courseCode: string;
   id: string;
+  isDeleted: boolean;
 }
 
 interface QuizData {
@@ -28,10 +29,12 @@ function FileInput({ onFileUpload }: FileInputProps) {
     quizName: "",
     course: "",
     courseCode: "",
-    id: uuidv4()
+    id: uuidv4(),
+    isDeleted: false,
   } as QuizInfo);
   const [quizGenerated, setQuizGenerated] = useState(false);
   const [viewQuizData, setViewQuizData] = useState(false);
+  const [fileName, setFileName] = useState("");
 
   const onDrop = (acceptedFiles: any) => {
     const file = acceptedFiles[0];
@@ -43,8 +46,10 @@ function FileInput({ onFileUpload }: FileInputProps) {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       const quizData = condenseExcelData(excelData);
+      const fileName = file.name;
+    
       setExcelData(quizData as any);
-      // onFileUpload({ ...quizInfo, quizData }); // This line is moved to the generateQuiz function
+      setFileName(fileName);
     };
 
     reader.readAsBinaryString(file);
@@ -55,7 +60,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
     for (let i = 1; i < data.length; i++) {
       const questionNumber = data[i][0];
       const question = data[i][1];
-      const options = [data[i][2], data[i][3], data[i][4], data[i][5]]; // Store options in a list
+      const options = [data[i][2], data[i][3], data[i][4], data[i][5]];
       const correctAnswer = data[i][6];
       quizData.push({
         questionNumber,
@@ -81,7 +86,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
   const generateQuiz = () => {
 
     if (quizInfo.quizName && quizInfo.course && quizInfo.courseCode && excelData) {
-      onFileUpload({ ...quizInfo, quizData: excelData });
+      onFileUpload({ quizInfo, quizData: excelData, fileName });
       setQuizGenerated(true);
       router.push("/");
     } else {
@@ -106,7 +111,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
           value={quizInfo.quizName}
           placeholder="Quiz Name"
           onChange={handleInputChange}
-          className="text-black bg-slate-500 w-full m-2 p-2 rounded"
+          className="mt-12 text-black bg-slate-500 w-full m-2 p-2 rounded"
         />
         <input
           type="text"
@@ -132,6 +137,11 @@ function FileInput({ onFileUpload }: FileInputProps) {
       >
         <input {...getInputProps()} />
         <p className="text-lg">Drag & drop an Excel file here, or click to select one</p>
+        {fileName && (
+          <div className="uploaded-file-box bg-blue-100 text-blue-800 p-2 mt-2 rounded w-full">
+            Uploaded File: {fileName}
+          </div>
+        )}
       </div>
       {viewQuizData && (
         <div className="mt-4">

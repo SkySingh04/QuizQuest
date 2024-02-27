@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 
 function QuizGenerator() {
   const [excelData, setExcelData] = useState(null);
+  const [fileName, setFileName] = useState("");
   const [user, setUser] = useState(auth.currentUser);
   const router = useRouter();
   // User authentication state
@@ -37,6 +38,7 @@ function QuizGenerator() {
 
   const handleFileUpload = async (data : any)  => {
     setExcelData(data);
+    setFileName(data.fileName);
     const filteredQuizData = data.quizData.filter((entry : any) => {
       return (
         entry.questionNumber && // Ensure questionNumber is not null
@@ -66,15 +68,12 @@ function QuizGenerator() {
       }
     }
   };
-  
-
-  // Implement quiz generation logic here using 'excelData'
 
   return (
     <div className="quiz-generator h-full"> 
       <FileInput onFileUpload={handleFileUpload} />
+      {fileName && <p>Uploaded File: {fileName}</p>}
       {/* Display and configure the generated quiz here */}
-      
     </div>
   );
 }
