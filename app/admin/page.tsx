@@ -44,9 +44,11 @@ const AdminPage = () => {
           userDataArray.push(data);
         }
       });
+      // Sort userDataArray by USN
+      userDataArray.sort((a: any, b: any) => a.USN.localeCompare(b.USN));
       setUserData(userDataArray);
     } catch (error) {
-      console.error('Error fetching admin data:', error);
+      console.error("Error fetching admin data: ", error);
     }
   }
 
@@ -79,10 +81,13 @@ const AdminPage = () => {
   const handleDownloadExcel = () => {
     var d = new Date();
     var n = formatDate(d);
-    // Flatten the userData array and include details for each quiz
-    const flatData = userData.map(user => {
+  
+    // Create a sorted copy of userData based on USN
+    const sortedUserData = [...userData].sort((a: any, b: any) => a.USN.localeCompare(b.USN));
+  
+    // Flatten the sortedUserData array and include details for each quiz
+    const flatData = sortedUserData.map(user => {
       const userFlat = {
-        'User ID': user.uid,
         'USN': user.USN,
         'Email': user.email,
         'Student Name': user.displayName,
@@ -106,7 +111,6 @@ const AdminPage = () => {
     XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}` );
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     saveAsExcelFile(excelBuffer, `Student Data Sheet ${n} .xlsx`);
-    
   };
 
   // Function to handle downloading individual quiz data
@@ -178,7 +182,6 @@ const AdminPage = () => {
       <table className='min-w-full  bg-gray-800 rounded-lg shadow-md mt-4'>
         <thead>
           <tr>
-            <th className='border-b-2 p-4'>User ID</th>
             <th className='border-b-2 p-4'>USN</th>
             <th className='border-b-2 p-4'>Email</th>
             <th className='border-b-2 p-4'>Display Name</th>
@@ -189,7 +192,6 @@ const AdminPage = () => {
         <tbody>
           {userData.map((user: any) => (
             <tr key={user.uid} className='border-b-2'>
-              <td className='p-4'>{user.uid}</td>
               <td className='p-4'>{user.USN}</td>
               <td className='p-4'>{user.email}</td>
               <td className='p-4'>{user.displayName}</td>
