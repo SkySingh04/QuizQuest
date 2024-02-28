@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from 'uuid';
 import {useRouter} from "next/navigation";
 interface FileInputProps {
-  onFileUpload: (data: { quizInfo: QuizInfo; quizData: any; fileName: string }) => void;
+  onFileUpload: (data: any) => void;
 }
 
 interface QuizInfo {
@@ -84,9 +84,8 @@ function FileInput({ onFileUpload }: FileInputProps) {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const generateQuiz = () => {
-
     if (quizInfo.quizName && quizInfo.course && quizInfo.courseCode && excelData) {
-      onFileUpload({ quizInfo, quizData: excelData, fileName });
+      onFileUpload({ ...quizInfo, quizData: excelData, fileName });
       setQuizGenerated(true);
       router.push("/");
     } else {
@@ -155,19 +154,20 @@ function FileInput({ onFileUpload }: FileInputProps) {
         </div>
       )}
       <div className="flex mt-4 mb-10">
-        {!viewQuizData ? (
+        {!viewQuizData && (
           <button
             onClick={generateQuiz}
-            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mr-4 mb-[200px]"
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-2"
           >
             Generate Quiz
           </button>
-        ) : (
+        )}
+        {viewQuizData && (
           <button
-            onClick={toggleViewQuizData}
-            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-4"
+            onClick={generateQuiz}
+            className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-md hover:bg-blue-600 mb-[200px] mr-2"
           >
-            Hide Quiz Data
+            Generate Quiz
           </button>
         )}
         <button
