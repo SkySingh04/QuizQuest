@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import * as XLSX from "xlsx";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from 'uuid';
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
+
 interface FileInputProps {
   onFileUpload: (data: any) => void;
 }
@@ -13,6 +14,7 @@ interface QuizInfo {
   courseCode: string;
   id: string;
   isDeleted: boolean;
+  isLcoked: boolean;
 }
 
 interface QuizData {
@@ -31,6 +33,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
     courseCode: "",
     id: uuidv4(),
     isDeleted: false,
+    isLcoked: false,
   } as QuizInfo);
   const [quizGenerated, setQuizGenerated] = useState(false);
   const [viewQuizData, setViewQuizData] = useState(false);
@@ -47,7 +50,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
       const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       const quizData = condenseExcelData(excelData);
       const fileName = file.name;
-    
+
       setExcelData(quizData as any);
       setFileName(fileName);
     };

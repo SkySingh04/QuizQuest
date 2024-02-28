@@ -6,7 +6,7 @@ import { collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import QuizDetails from '../components/QuizDetails';
-import {formatDate} from '../Date';
+import { formatDate } from '../Date';
 import toast from 'react-hot-toast';
 
 const AdminPage = () => {
@@ -14,6 +14,7 @@ const AdminPage = () => {
   const router = useRouter();
   const [userData, setUserData] = useState<any[]>([]);
   const [quizData, setQuizData] = useState<any>([]);
+  const [lockStatus, setLockStatus] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     fetchQuizData();
@@ -44,7 +45,6 @@ const AdminPage = () => {
           userDataArray.push(data);
         }
       });
-      // Sort userDataArray by USN
       userDataArray.sort((a: any, b: any) => a.USN.localeCompare(b.USN));
       setUserData(userDataArray);
     } catch (error) {
@@ -68,19 +68,38 @@ const AdminPage = () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'quizzes'));
       const quizDoc = querySnapshot.docs.find(doc => doc.data().data.quizName === quizName);
+
       if (quizDoc) {
         await updateDoc(doc(db, 'quizzes', quizDoc.id), {
           'data.isDeleted': true,
         });
         fetchQuizData();
-        toast.success(`Quiz ${quizName} marked as deleted.`);
+        toast.success(`Quiz "${quizName}" marked as deleted.`);
       } else {
         console.error('Quiz not found:', quizName);
-        toast.error(`Quiz ${quizName} not found.`);
+        toast.error(`Quiz "${quizName}" not found.`);
       }
     } catch (error) {
       console.error('Error deleting quiz:', error);
-      toast.error(`Error marking quiz ${quizName} as deleted.`);
+      toast.error(`Error marking quiz "${quizName}" as deleted.`);
+    }
+  };
+
+  async function handleLockUnlockQuiz(quizName: any) {
+    const querySnapshot = await getDocs(collection(db, 'quizzes'));
+    const quizDoc = querySnapshot.docs.find(doc => doc.data().data.quizName === quizName);
+
+    if (quizDoc) {
+      const currentLockStatus = quizDoc.data().data.isLocked;
+      await updateDoc(doc(db, 'quizzes', quizDoc.id), {
+        'data.isLocked': !currentLockStatus,
+      });
+      setLockStatus(prevStatus => ({ ...prevStatus, [quizName]: !currentLockStatus }));
+      fetchQuizData();
+      toast.success(`Quiz "${quizName}" ${currentLockStatus ? 'unlocked' : 'locked'} successfully.`);
+    } else {
+      console.error('Quiz not found:', quizName);
+      toast.error(`Quiz "${quizName}" not found.`);
     }
   };
 
@@ -99,11 +118,8 @@ const AdminPage = () => {
   const handleDownloadExcel = () => {
     var d = new Date();
     var n = formatDate(d);
-  
-    // Create a sorted copy of userData based on USN
+
     const sortedUserData = [...userData].sort((a: any, b: any) => a.USN.localeCompare(b.USN));
-  
-    // Flatten the sortedUserData array and include details for each quiz
     const flatData = sortedUserData.map(user => {
       const userFlat = {
         'USN': user.USN,
@@ -111,7 +127,7 @@ const AdminPage = () => {
         'Student Name': user.displayName,
         'Total Score': calculateTotalScore(user.quizData),
         // Flatten quizData array
-        ...user.quizData.reduce((acc : any, quiz : any, index : any) => ({
+        ...user.quizData.reduce((acc: any, quiz: any, index: any) => ({
           ...acc,
           [` ${quiz.quizName} `]: `${quiz.score} / ${quiz.totalQuestions}`,
           [`${quiz.quizName} Time`]: quiz.time,
@@ -122,18 +138,17 @@ const AdminPage = () => {
       };
       return userFlat;
     });
-  
+
     // Create Excel sheet
     const ws = XLSX.utils.json_to_sheet(flatData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}` );
+    XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}`);
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     saveAsExcelFile(excelBuffer, `Student Data Sheet ${n} .xlsx`);
   };
 
   // Function to handle downloading individual quiz data
-  const handleDownloadQuiz = (quizName : any) => {
-    // Filter userData to get data for the specific quizName
+  const handleDownloadQuiz = (quizName: any) => {
     const quizData = userData.map(user => {
       const userQuiz = user.quizData.find((quiz: any) => quiz.quizName === quizName);
       return {
@@ -147,7 +162,6 @@ const AdminPage = () => {
       };
     }).filter(user => user['Quiz Name'] !== '');
 
-    // Create Excel sheet for the specific quiz
     const ws = XLSX.utils.json_to_sheet(quizData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, `${quizName} Data`);
@@ -178,13 +192,13 @@ const AdminPage = () => {
         <div className="flex flex-wrap">
           {console.log(quizData)}
           {quizData
-            .map((quiz:any, index: any) => (
+            .map((quiz: any, index: any) => (
               <div key={index} className="mr-4 mb-4">
                 <button
                   onClick={() => handleDownloadQuiz(quiz)}
                   className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4`}
                 >
-                  Download {quiz} Data
+                  Download "{quiz}" Data
                 </button>
                 <button
                   onClick={() => handleDeleteQuiz(quiz)}
@@ -192,13 +206,19 @@ const AdminPage = () => {
                 >
                   Delete
                 </button>
+                <button
+                  onClick={() => handleLockUnlockQuiz(quiz)}
+                  className={`bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                >
+                  {lockStatus[quiz] ? 'Unlock' : 'Lock'}
+                </button>
               </div>
             ))}
         </div>
       )}
       <a
-      href='/createquiz'
-      className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-4 rounded mb-4`}
+        href='/createquiz'
+        className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-4 rounded mb-4`}
       >
         Create Quiz
       </a>
