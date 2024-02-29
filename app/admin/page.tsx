@@ -8,6 +8,10 @@ import * as XLSX from 'xlsx';
 import QuizDetails from '../components/QuizDetails';
 import { formatDate } from '../Date';
 import toast from 'react-hot-toast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 
 const AdminPage = () => {
   const [user, setUser] = useState(auth.currentUser);
@@ -126,7 +130,7 @@ const AdminPage = () => {
         'Email': user.email,
         'Student Name': user.displayName,
         'Total Score': calculateTotalScore(user.quizData),
-        // Flatten quizData array
+
         ...user.quizData.reduce((acc: any, quiz: any, index: any) => ({
           ...acc,
           [` ${quiz.quizName} `]: `${quiz.score} / ${quiz.totalQuestions}`,
@@ -139,7 +143,6 @@ const AdminPage = () => {
       return userFlat;
     });
 
-    // Create Excel sheet
     const ws = XLSX.utils.json_to_sheet(flatData);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, `Student Data Sheet ${n}`);
@@ -181,13 +184,6 @@ const AdminPage = () => {
   return (
     <div className='  flex flex-col items-center justify-center  p-6 text-white min-h-screen my-[100px]'>
       <h1 className='text-3xl font-bold mb-6'>Admin Page</h1>
-      <button
-        onClick={handleDownloadExcel}
-        disabled={userData.length === 0}
-        className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4`}
-      >
-        Download All Quiz Data
-      </button>
       {userData.length > 0 && quizData.length > 0 && (
         <div className="flex flex-wrap">
           {console.log(quizData)}
@@ -195,33 +191,45 @@ const AdminPage = () => {
             .map((quiz: any, index: any) => (
               <div key={index} className="mr-4 mb-4">
                 <button
+                  onClick={() => handleLockUnlockQuiz(quiz)}
+                  className={`bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                >
+                  <FontAwesomeIcon icon={lockStatus[quiz] ? faLock : faUnlock} />
+                </button>
+                <button
                   onClick={() => handleDownloadQuiz(quiz)}
                   className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4`}
                 >
-                  Download "{quiz}" Data
+                  <FontAwesomeIcon icon={faDownload} className="mr-2" />
+                  "{quiz}" Data
                 </button>
                 <button
                   onClick={() => handleDeleteQuiz(quiz)}
                   className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4`}
                 >
-                  Delete
-                </button>
-                <button
-                  onClick={() => handleLockUnlockQuiz(quiz)}
-                  className={`bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4`}
-                >
-                  {lockStatus[quiz] ? 'Unlock' : 'Lock'}
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>
             ))}
         </div>
       )}
-      <a
-        href='/createquiz'
-        className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mx-4 rounded mb-4`}
-      >
-        Create Quiz
-      </a>
+      <div className='flex items-center pace-x-4'>
+        <button
+          onClick={handleDownloadExcel}
+          disabled={userData.length === 0}
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2`}
+          style={{ height: '2.5rem' }}
+        >
+          Download All Quiz Data
+        </button>
+        <a
+          href='/createquiz'
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2`}
+          style={{ height: '2.5rem' }}
+        >
+          Create Quiz
+        </a>
+      </div>
       <table className='min-w-full  bg-gray-800 rounded-lg shadow-md mt-4'>
         <thead>
           <tr>
