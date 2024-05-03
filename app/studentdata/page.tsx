@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import * as XLSX from 'xlsx';
 import QuizDetails from '../components/QuizDetails';
 import {formatDate} from '../Date';
+import toast from 'react-hot-toast';
 
 const AdminPage = () => {
   const [user, setUser] = useState(auth.currentUser);
@@ -44,6 +45,7 @@ const AdminPage = () => {
       setUserData(userDataArray);
     } catch (error) {
       console.error('Error fetching admin data:', error);
+      toast.error('Error fetching admin data');
     }
   }
 
