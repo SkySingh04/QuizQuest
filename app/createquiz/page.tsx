@@ -18,7 +18,7 @@ function QuizGenerator() {
     // Check the user's authentication state
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user.providerData[0].email)
+        // console.log(user.providerData[0].email)
         if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com'){
         setUser(user as any);
       }
@@ -57,11 +57,11 @@ function QuizGenerator() {
         const quizCollection = collection(db, 'quizzes'); // 'quizzes' is the collection name
   
         // Add the quiz data to Firestore
-        console.log(data)
+        // console.log(data)
         const docRef = await addDoc(quizCollection, {data});
         toast.success("Quiz added successfully");
   
-        console.log('Quiz data added with ID: ', docRef.id);
+        // console.log('Quiz data added with ID: ', docRef.id);
       } catch (error) {
         console.error('Error adding quiz data: ', error);
         toast.error("Quiz addition failed");

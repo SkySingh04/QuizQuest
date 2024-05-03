@@ -186,7 +186,6 @@ const AdminPage = () => {
       <h1 className='text-3xl font-bold mb-6'>Admin Page</h1>
       {userData.length > 0 && quizData.length > 0 && (
         <div className="flex flex-wrap">
-          {console.log(quizData)}
           {quizData
             .map((quiz: any, index: any) => (
               <div key={index} className="mr-4 mb-4">

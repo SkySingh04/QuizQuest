@@ -30,7 +30,7 @@ async function fetchUserData() {
       entry.uid == auth.currentUser?.uid
     );
   });
-  console.log(currentUserData);
+  // console.log(currentUserData);
   return userData;
 }
 

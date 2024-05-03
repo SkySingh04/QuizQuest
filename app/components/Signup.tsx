@@ -29,7 +29,7 @@ function SignUpForm() {
       const userDocRef = doc(db, 'users', user.uid);
           setDoc(userDocRef, userData)
       .then(() => {
-        console.log('User document created with UID: ', user.uid);
+        // console.log('User document created with UID: ', user.uid);
       })
       .catch((error) => {
         console.error('Error creating user document: ', error);

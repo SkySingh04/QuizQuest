@@ -26,7 +26,7 @@ export default function App() {
 
   const handleSendEmail = (email: string) => {
     // Implement your logic to send the email here
-    console.log("Sending email to:", email);
+    // console.log("Sending email to:", email);
     sendPasswordResetEmail(auth, email)
       .then(() => {
         console.log("Email sent successfully");

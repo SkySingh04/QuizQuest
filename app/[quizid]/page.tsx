@@ -45,12 +45,11 @@ function Quiz() {
         const quizData = doc.data();
         const reqQuiz = quizData.data.id;
         if (reqQuiz == quizId) {
-          console.log("found quiz")
           toReturn = quizData.data;
           // console.log(quizData.data)
         }
         else{
-          console.log("not found")
+          console.log("Quiz was not found")
         }
       }); 
       return toReturn  
@@ -73,17 +72,12 @@ function Quiz() {
       }
     });
 
-    
-    // Fetch quiz questions from your data source (e.g., Firebase Firestore)
-    // In this example, we're simulating questions using a local array
       async function fetchData() {
         const data = await fetchQuizData().then((data) => { return data });
-        console.log(data.quizData)
+        // console.log(data.quizData)
         setQuestions(data.quizData);  
       }
       fetchData();
-    
-    // setQuestions(fetchedQuestions);
   }, []);
   
 
@@ -117,13 +111,6 @@ function Quiz() {
 
 
     const handleQuizSubmit = async () => {
-      console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
-      toast.success('Quiz Submitted Succesfully!');
-  
-      // Create an object with quiz results data
-      
-  
-    // Get the user's UID from the authenticated user
     const user = auth.currentUser;
     if (!user) {
       console.error('User not authenticated');
@@ -133,12 +120,9 @@ function Quiz() {
     const correctAnswers = questions.map((question : any) => question.correctAnswer)
     for(let i = 0; i < selectedOptions.length; i++){
       if(selectedOptions[i] == correctAnswers[i]){
-        console.log("correct")
-        // setScore(score + 1)
         myScore = myScore + 1
       }
     }
-    console.log(myScore)
 
     var d = new Date();
     var n = formatDateTime(d);
@@ -162,6 +146,8 @@ function Quiz() {
           await updateDoc(userDocRef as any, {
             quizData: arrayUnion(quizResults),
           });
+          console.log(`Quiz Completed! Your Score: ${score}/${questions.length}`);
+          toast.success('Quiz Submitted Succesfully!');    
         // Redirect to the results page
         router.push(`/results`);
 
@@ -170,8 +156,6 @@ function Quiz() {
     }
   }
     
-    // You can perform further actions, such as navigating to the results page.
-
   const currentQuestion = questions[currentQuestionIndex];
 
   
