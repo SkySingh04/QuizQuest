@@ -34,6 +34,7 @@ function Quiz() {
   const [selectedOptions, setSelectedOptions] = useState<(string | null)[]>([]);
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
+  const [isTimeUp, setIsTimeUp] = useState(false);
 
 
   async function fetchQuizData() {
@@ -60,7 +61,23 @@ function Quiz() {
     
   }
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsTimeUp(true);
+    }, 3000); // Set the quiz time limit here. 60000ms = 1 minute
   
+    // Clear the timer when the component unmounts
+    return () => clearTimeout(timer);
+  }, []);
+  
+  useEffect(() => {
+    if (isTimeUp) {
+      console.log('Time is up!');
+      toast.error('Time is up! Auto Submitting Quiz');
+      // handleQuizSubmit();
+    }
+  }, [isTimeUp]);
+
   useEffect(() => {
     // Check the user's authentication state
     onAuthStateChanged(auth, (user: any) => {
