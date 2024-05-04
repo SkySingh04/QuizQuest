@@ -33,6 +33,7 @@ function SignUpForm() {
       })
       .catch((error) => {
         console.error('Error creating user document: ', error);
+        toast.error("Sign up failed");
       });
 
       // You can also update the user's profile

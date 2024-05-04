@@ -53,6 +53,8 @@ const AdminPage = () => {
       setUserData(userDataArray);
     } catch (error) {
       console.error("Error fetching admin data: ", error);
+      toast.error("Error fetching admin data");
+
     }
   }
 
@@ -65,6 +67,7 @@ const AdminPage = () => {
       setQuizData(quizNameArray);
     } catch (error) {
       console.error('Error fetching quiz data:', error);
+      toast.error("Error fetching quiz data")
     }
   }
 

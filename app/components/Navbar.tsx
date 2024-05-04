@@ -32,6 +32,7 @@ const Navbar = () => {
     }).catch((error) => {
       // An error happened.
       console.log(error);
+      toast.error("Unable to sign out")
     });
 
     // After successful sign-out, you can also clear the user state if needed

@@ -49,9 +49,7 @@ function Quiz() {
           toReturn = quizData.data;
           // console.log(quizData.data)
         }
-        else{
-          console.log("Quiz was not found")
-        }
+        
       }); 
       return toReturn  
     }
@@ -131,10 +129,20 @@ function Quiz() {
     const user = auth.currentUser;
     if (!user) {
       console.error('User not authenticated');
+      toast.error("User not authenticated")
       return;
     }
+    
     let myScore = 0
     const correctAnswers = questions.map((question : any) => question.correctAnswer)
+    
+    //check if all questions are attempted
+
+    if (selectedOptions.length !== correctAnswers.length){
+      toast.error("Please attempt all of the questions")
+      return  
+    }
+    
     for(let i = 0; i < selectedOptions.length; i++){
       if(selectedOptions[i] == correctAnswers[i]){
         myScore = myScore + 1
@@ -170,6 +178,7 @@ function Quiz() {
 
     } catch (error) {
       console.error('Error storing quiz results:', error);
+      toast.error('Error storing quiz results, Check Console');
     }
   }
     
