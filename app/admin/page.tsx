@@ -24,8 +24,8 @@ const AdminPage = () => {
     fetchQuizData();
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com') {
-          console.log(user.uid)
+        //these are the admin user uid's. Yes i wrote it in the code. Go cry about it.
+        if (user.uid === 'faNLMo6zT2XhXH0dTBaJQunXe9B3' || user.uid === 'BiiqrNezHSM8NTF1P5yNkkX4x8F2') {
           setUser(user);
         } else {
           toast.error("Unauthorized :(");
