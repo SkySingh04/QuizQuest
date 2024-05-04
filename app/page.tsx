@@ -18,7 +18,7 @@ export default function Home() {
         </Link>
 
         {/* Student Card */}
-        <Link href="/student">
+        <Link href="/quizzes">
           <div className={`card bg-gray-900 mx-6 student-card items-center justify-center lg:h-[300px] lg:w-[500px]  text-white font-semibold px-6 py-4 rounded-md cursor-pointer transition-transform duration-300 ${styles.hoverEffect}`}>
             <FaUserGraduate className="text-4xl mb-4" /> {/* Font Awesome icon */}
             <h1 className="text-2xl mb-2">Student Dashboard</h1>

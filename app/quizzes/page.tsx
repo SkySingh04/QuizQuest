@@ -69,7 +69,7 @@ const StudentPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       {/* Quiz Cards Section */}
-      <div className="mt-8 text-gray-300 text-center">
+      <div className="mt-8 text-white text-center">
         <h1 className="text-3xl font-semibold mb-6">Join the quiz challenge and unlock your potential!</h1>
         <div className="flex flex-wrap justify-center mt-4">
           {quizzes.map((quiz: any) => {
@@ -84,7 +84,7 @@ const StudentPage = () => {
             return (
               <div
                 key={quiz.data.id}
-                className={`bg-gradient-to-r from-customBlue to-customViolet font-black px-6 py-4 rounded-md m-4 cursor-pointer transform hover:scale-105 transition duration-300 ${isQuizAttempted ? 'opacity-50' : ''
+                className={`bg-gray-900 font-black px-6 py-4 rounded-md m-4 cursor-pointer transform hover:scale-105 hover:border-amber-400 border border-gray-900 transition duration-300 hoverEffect ${isQuizAttempted ? 'opacity-50' : ''
                   }`}
               >
                 {isQuizAttempted ? (
