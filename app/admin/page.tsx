@@ -25,6 +25,7 @@ const AdminPage = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         if (user.providerData[0].email === 'admindsce@dsce.com' || user.providerData[0].email === 'testadmin@dsce.com') {
+          console.log(user.uid)
           setUser(user);
         } else {
           toast.error("Unauthorized :(");
@@ -185,7 +186,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className='  flex flex-col items-center justify-center  p-6 text-white min-h-screen my-[100px]'>
+    <div className='  flex flex-col items-center justify-center  px-2 text-white min-h-screen my-[100px]'>
       <h1 className='text-3xl font-bold mb-6'>Admin Page</h1>
       {userData.length > 0 && quizData.length > 0 && (
         <div className="flex flex-wrap">
@@ -194,20 +195,20 @@ const AdminPage = () => {
               <div key={index} className="mr-4 mb-4">
                 <button
                   onClick={() => handleLockUnlockQuiz(quiz)}
-                  className={`bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                  className={`bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 mb-4`}
                 >
                   <FontAwesomeIcon icon={lockStatus[quiz] ? faLock : faUnlock} />
                 </button>
                 <button
                   onClick={() => handleDownloadQuiz(quiz)}
-                  className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                  className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mb-4`}
                 >
                   <FontAwesomeIcon icon={faDownload} className="mr-2" />
                   "{quiz}" Data
                 </button>
                 <button
                   onClick={() => handleDeleteQuiz(quiz)}
-                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-4`}
+                  className={`bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mb-4`}
                 >
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
