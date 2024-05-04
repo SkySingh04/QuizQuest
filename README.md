@@ -28,8 +28,9 @@ The live deployment of QuizQuest can be accessed at [QuizQuest](https://quiz-que
 
 ### Admin Panel
 
-- **Firebase Authentication**: Admins can securely log in to access the admin panel.
 - **Quiz Data Upload**: Admins can upload Excel files containing quiz data for automatic quiz generation.
+- **Manage Quizzes*: Admins can easily delete, lock or download quiz data.
+- **Manage Results: Admins can easily download specific quiz results. 
 - **Interactive UI**: User-friendly interface for entering quiz details and managing quiz data.
 - **Firebase Integration**: Firebase Firestore database integration for storing quiz data securely.
 
@@ -37,6 +38,8 @@ The live deployment of QuizQuest can be accessed at [QuizQuest](https://quiz-que
 
 - **User Authentication**: Students can securely log in using Firebase authentication.
 - **Quiz Access**: Access available quizzes, view details, and track completion status.
+- **Quiz Timer**: Quizzes automatically submit after specific time.
+- **Quiz Safety**: Students need to answer all questions to submit the quiz.
 - **Real-time Updates**: Firebase ensures real-time updates for quiz status and progress tracking.
 
 
