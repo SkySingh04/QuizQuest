@@ -20,8 +20,8 @@ type QuizQuestion = {
 
 function Quiz() {
   
+  const quizTime = 600000; // This can be updated to allow for custom quiz times
 
-  
   const router = useRouter();
   const SearchParams = useSearchParams();
   const quizId : any = SearchParams.get('id')
@@ -35,6 +35,7 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(quizTime/1000); // Time limit in seconds
 
 
   async function fetchQuizData() {
@@ -59,20 +60,28 @@ function Quiz() {
     
   }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsTimeUp(true);
-    }, 3000); // Set the quiz time limit here. 60000ms = 1 minute
-  
-    // Clear the timer when the component unmounts
-    return () => clearTimeout(timer);
-  }, []);
+  // Update the useEffect hook where the timer is set
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setIsTimeUp(true);
+  }, quizTime); 
+
+  const interval = setInterval(() => {
+    setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+  }, 1000); // Decrease timeLeft by 1 every second
+
+  // Clear the timer and the interval when the component unmounts or when the time is up
+  return () => {
+    clearTimeout(timer);
+    clearInterval(interval);
+  };
+}, []);
   
   useEffect(() => {
     if (isTimeUp) {
       console.log('Time is up!');
       toast.error('Time is up! Auto Submitting Quiz');
-      // handleQuizSubmit();
+      handleQuizSubmit();
     }
   }, [isTimeUp]);
 
@@ -138,7 +147,7 @@ function Quiz() {
     
     //check if all questions are attempted
 
-    if (selectedOptions.length !== correctAnswers.length){
+    if (selectedOptions.length !== correctAnswers.length && !isTimeUp){
       toast.error("Please attempt all of the questions")
       return  
     }
@@ -188,6 +197,7 @@ function Quiz() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      
       {currentQuestion ? (
         <div className="bg-slate-800 text-white p-8 rounded-lg shadow-lg w-4/6 h-4/6">
           <h2 className="text-xl mb-4">Question {currentQuestionIndex + 1}:</h2>
@@ -216,6 +226,9 @@ function Quiz() {
                 Previous
               </button>
             )}
+            <div className=" bg-slate-600 text-white p-2 rounded-lg shadow-lg">
+      Time left: {timeLeft} seconds
+    </div>
             {isFinalQuestion ? (
               <button
                 className="px-4 py-2 bg-blue-500 hover-bg-blue-700 text-white rounded-md"
