@@ -223,7 +223,7 @@ function Quiz() {
               </button>
             )}
             <div className=" bg-slate-600 text-white p-2 rounded-lg shadow-lg">
-              Time left: {timeLeft} seconds
+              Time left: {Math.floor(timeLeft / 60)} minutes {timeLeft % 60} seconds
             </div>
             {isFinalQuestion ? (
               <button
