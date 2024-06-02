@@ -14,7 +14,8 @@ interface QuizInfo {
   courseCode: string;
   id: string;
   isDeleted: boolean;
-  isLcoked: boolean;
+  isLocked: boolean;
+  customTimer: number;
 }
 
 interface QuizData {
@@ -33,7 +34,8 @@ function FileInput({ onFileUpload }: FileInputProps) {
     courseCode: "",
     id: uuidv4(),
     isDeleted: false,
-    isLcoked: false,
+    isLocked: false,
+    customTimer: 600, // Default value in seconds
   } as QuizInfo);
   const [quizGenerated, setQuizGenerated] = useState(false);
   const [viewQuizData, setViewQuizData] = useState(false);
@@ -80,7 +82,7 @@ function FileInput({ onFileUpload }: FileInputProps) {
     const { name, value } = e.target;
     setQuizInfo({
       ...quizInfo,
-      [name]: value,
+      [name]: name === "customTimer" ? parseInt(value, 10) : value, // Ensure customTimer is an integer
     });
   };
 
@@ -103,9 +105,9 @@ function FileInput({ onFileUpload }: FileInputProps) {
       alert("Please upload an Excel file to view quiz data.");
     }
   };
+
   return (
-    <div className="h-full
-      flex flex-col items-center lg:mt-[70px] mt-[100px] ">
+    <div className="h-full flex flex-col items-center lg:mt-[70px] mt-[100px] ">
       <div className="w-full max-w-md mt-4  ">
         <input
           type="text"
@@ -128,6 +130,14 @@ function FileInput({ onFileUpload }: FileInputProps) {
           name="courseCode"
           value={quizInfo.courseCode}
           placeholder="Course Code"
+          onChange={handleInputChange}
+          className="text-black bg-slate-500 w-full m-2 p-2 rounded"
+        />
+        <input
+          type="number"
+          name="customTimer"
+          value={quizInfo.customTimer}
+          placeholder="Custom Timer (seconds)"
           onChange={handleInputChange}
           className="text-black bg-slate-500 w-full m-2 p-2 rounded"
         />
