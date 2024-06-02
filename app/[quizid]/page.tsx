@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { collection, getDocs, arrayUnion, updateDoc, doc } from 'firebase/firestore';
-import { auth, db } from '../firebase'; // Import Firestore and auth
+import { auth, db } from '../firebase';
 import { formatDateTime } from '../Date';
 import toast from 'react-hot-toast';
 
@@ -15,7 +15,6 @@ type QuizQuestion = {
 };
 
 function Quiz() {
-  const quizTime = 600000; // This can be updated to allow for custom quiz times
   const router = useRouter();
   const searchParams = useSearchParams();
   const quizId: any = searchParams.get('id');
@@ -29,7 +28,7 @@ function Quiz() {
   const [score, setScore] = useState(0);
   const [isFinalQuestion, setIsFinalQuestion] = useState(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(quizTime / 1000); // Time limit in seconds
+  const [timeLeft, setTimeLeft] = useState(0); // Time limit in seconds
 
   // Function to shuffle an array
   function shuffleArray(array: any[]) {
@@ -63,6 +62,18 @@ function Quiz() {
 
   // Update the useEffect hook where the timer is set
   useEffect(() => {
+    let quizTime = 600000; // Default time if custom timer is not set
+    async function setQuizTime() {
+      const data = await fetchQuizData();
+      if (data) {
+        quizTime = data.customTimer * 1000; // Convert seconds to milliseconds
+        setQuestions(data.quizData);
+        setTimeLeft(quizTime / 1000); // Time limit in seconds
+      }
+    }
+
+    setQuizTime();
+
     const timer = setTimeout(() => {
       setIsTimeUp(true);
     }, quizTime);
@@ -204,8 +215,8 @@ function Quiz() {
               <div
                 key={index}
                 className={`p-4 text-lg cursor-pointer rounded-lg transition duration-300 ${selectedOptions[currentQuestionIndex] === option
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-700 hover:bg-gray-500'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-700 hover:bg-gray-500'
                   }`}
                 onClick={() => handleOptionSelect(option)}
               >
@@ -234,7 +245,7 @@ function Quiz() {
               </button>
             ) : (
               <button
-                className="px-4 py-2 bg-blue-500 hover-bg-blue-700 text-white rounded-md"
+                className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md"
                 onClick={handleNextQuestion}
               >
                 Next
@@ -243,7 +254,7 @@ function Quiz() {
           </div>
         </div>
       ) : (
-        <p>Loading questions...</p>
+        <p>Loading...</p>
       )}
     </div>
   );
