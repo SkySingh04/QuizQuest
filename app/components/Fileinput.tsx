@@ -35,11 +35,12 @@ function FileInput({ onFileUpload }: FileInputProps) {
     id: uuidv4(),
     isDeleted: false,
     isLocked: false,
-    customTimer: 600, // Default value in seconds
+    customTimer: 0, // Default value in seconds
   } as QuizInfo);
   const [quizGenerated, setQuizGenerated] = useState(false);
   const [viewQuizData, setViewQuizData] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [timerInput, setTimerInput] = useState({ minutes: "", seconds: "" });
 
   const onDrop = (acceptedFiles: any) => {
     const file = acceptedFiles[0];
@@ -82,7 +83,15 @@ function FileInput({ onFileUpload }: FileInputProps) {
     const { name, value } = e.target;
     setQuizInfo({
       ...quizInfo,
-      [name]: name === "customTimer" ? parseInt(value, 10) : value, // Ensure customTimer is an integer
+      [name]: value,
+    });
+  };
+
+  const handleTimerInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setTimerInput({
+      ...timerInput,
+      [name]: value,
     });
   };
 
@@ -90,7 +99,8 @@ function FileInput({ onFileUpload }: FileInputProps) {
 
   const generateQuiz = () => {
     if (quizInfo.quizName && quizInfo.course && quizInfo.courseCode && excelData) {
-      onFileUpload({ ...quizInfo, quizData: excelData, fileName });
+      const totalSeconds = (parseInt(timerInput.minutes) * 60) + parseInt(timerInput.seconds);
+      onFileUpload({ ...quizInfo, customTimer: totalSeconds, quizData: excelData, fileName });
       setQuizGenerated(true);
       router.push("/");
     } else {
@@ -135,10 +145,18 @@ function FileInput({ onFileUpload }: FileInputProps) {
         />
         <input
           type="number"
-          name="customTimer"
-          value={quizInfo.customTimer}
-          placeholder="Custom Timer (seconds)"
-          onChange={handleInputChange}
+          name="minutes"
+          value={timerInput.minutes}
+          placeholder="Minutes"
+          onChange={handleTimerInputChange}
+          className="text-black bg-slate-500 w-full m-2 p-2 rounded"
+        />
+        <input
+          type="number"
+          name="seconds"
+          value={timerInput.seconds}
+          placeholder="Seconds"
+          onChange={handleTimerInputChange}
           className="text-black bg-slate-500 w-full m-2 p-2 rounded"
         />
       </div>
